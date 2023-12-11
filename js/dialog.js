@@ -66,7 +66,7 @@ var body = document.querySelector('body');
            }
         }
         & .dialog_body {
-           padding: 0 0.7em ;
+           padding: 1em 0.7em ;
            & p {
               line-height: 25px;
            }
