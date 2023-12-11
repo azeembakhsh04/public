@@ -1,4 +1,4 @@
-var headImg = 'https://dialog.w3spaces.com/Images/Logo.png';
+var headImg = 'images/programming-tasks-logo.png';
 headTxt = 'From Developer';
 var bodyTxt = 'The project design and made by <b>Programming Tasks</b>. Please support developer by subscribeing there channel, tap visit to reach our Youtube channel.'
 var positiveBtnLink = 'https://youtube.com/@programmingtasks'
