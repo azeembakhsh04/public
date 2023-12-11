@@ -10,7 +10,11 @@ var body = document.querySelector('body');
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
   <style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
    .dialog_container {
+      font-family: 'Itim', cursive;
       position: fixed;
       font-family: 'Josefin Sans', sans-serif;
       height: 100vh;
