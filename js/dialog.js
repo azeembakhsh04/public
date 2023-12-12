@@ -1,6 +1,6 @@
 var headImg = 'https://azeembakhsh04.github.io/public/images/programming-tasks-logo.png';
 
-headTxt = 'From Developer';
+headTxt = 'Azeem Bakhsh';
 var bodyTxt = 'The project designed and made by <b> Programming Tasks </b>. Please support developer on social media platforms.'
 
 var positiveBtnLink = 'https://youtube.com/@programmingtasks'
