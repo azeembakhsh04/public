@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+ </head>
+
+<body>
+   <style>
+         * {
+       padding: 0;
+       margin: 0;
+    }
+    
+    .game-container {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #5BAF98;
+      margin: 0;
+      & .player {
+         position: absolute;
+         width: 75%;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 5px 15px;
+         margin: 5px 0;
+         color: white;
+         border-radius: 50vw;
+         z-index: 10;
+         & icon {
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            & .player-name {
+               width: 70%;
+               background: transparent;
+               outline: none;
+               border: none;
+               font-size: 20px;
+               color: white;
+             }
+           }
+        }
+        & .player-1 {
+            top: 35px;
+            background: #0F7D42;
+        }
+        & .player-2 {
+            top: 90px;
+            background: #3D5FFF;
+        }
+         
+      }
+      & .game-row {
+         width: auto;
+         background: transparent;
+         padding: 0;
+         margin: 20px 0;
+         border: 4px solid white;
+         border-radius: 20px;
+         background: #321C72;
+         box-shadow:; 
+         & .game-boxes {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            border: 0px solid white;
+            border-collapse: collapse;
+            & .box {
+               width: 95px;
+               height: 95px;
+               border: 2px solid white;
+               padding: 0 auto;
+               margin: 0;
+               font-size: 80px;
+               text-align: center;
+               outline: none;
+               background: transparent;
+             }
+             & #b1 {
+                border-top: none;
+                border-left: none;
+             }
+             & #b2 {
+                border-top: none;
+              }
+             & #b3 {
+                border-top: none;
+                border-right: none;
+             }
+             & #b4 {
+                border-left: none;
+             }
+             & #b6 {
+                border-right: none;
+             }
+             & #b7 {
+                border-left: none;
+                border-bottom: none;
+             }
+             & #b8 {
+                border-bottom: none;
+             }
+             & #b9 {
+                border-right: none;
+                border-bottom: none;
+             }
+            
+          } 
+       }
+
+       & .buttons {
+          & #play-agin-btn {
+            background:  #321C72;
+            border: none;
+            border-radius: 50vw;
+            font-size: 20px;
+            color: white;
+            padding: 8px 50px;
+            box-shadow: inset 1px 2px 3px 1px #FFFFFF,
+            1px 2px 3px 1px #FFFFFF;
+            &:hover {
+               box-shadow: inset 2px 3px 4px 1px #FFFFFF,
+               2px 3px 4px 1px #B49BFF;
+            }
+         }
+       }
+    }
+   </style>
+ 
+ <div class="game-container">
+    
+       <div class="player player-1">
+           <icon class="circle player-profile">
+             O <input class="player-name player-name-1" value="Player 1"/>
+          </icon>
+          <p class="player-score1">0</p>
+       </div>
+       
+       <div class="player player-2">
+          <icon class="x-circle player-profile">
+             X <input class="player-name player-name-2" value="Player 2"/>
+          </icon>
+          <p class="player-score2">0</p>
+       </div>
+     <div class="win-line"></div>
+    <div class="game-row">
+    <div class="game-boxes">
+       <input type="text" class="box" id="b1" onclick="myFun_1(); winowner();" readonly>
+       <input type="text" class="box" id="b2" onclick="myFun_2(); winowner();" readonly>
+       <input type="text" class="box" id="b3" onclick="myFun_3(); winowner();" readonly>
+    </div>
+    <div class="game-boxes">
+       <input type="text" class="box" id="b4" onclick="myFun_4(); winowner();" readonly>
+       <input type="text" class="box" id="b5" onclick="myFun_5(); winowner();" readonly>
+       <input type="text" class="box" id="b6" onclick="myFun_6(); winowner();" readonly>
+    </div>
+    <div class="game-boxes">
+       <input type="text" class="box" id="b7" onclick="myFun_7(); winowner();" readonly>
+       <input type="text" class="box" id="b8" onclick="myFun_8(); winowner();" readonly>
+       <input type="text" class="box" id="b9" onclick="myFun_9(); winowner()" readonly>
+    </div>
+    </div>
+    <div class="buttons">
+    <button id="play-agin-btn" onclick="reStart()"> Play again </button>
+   </div>
+ </div>
+ 
+ <script>
+    
+     var b1 = document.querySelector('#b1');
+ var b2 = document.querySelector('#b2');
+ var b3 = document.querySelector('#b3');
+ var b4 = document.querySelector('#b4');
+ var b5 = document.querySelector('#b5');
+ var b6 = document.querySelector('#b6');
+ var b7 = document.querySelector('#b7');
+ var b8 = document.querySelector('#b8');
+ var b9 = document.querySelector('#b9');
+ var playAginBtn = document.querySelector('#play-agin-btn');
+ var boxes = document.querySelectorAll('.box');
+ 
+ var player1 = document.querySelector('.player-1'); 
+ var player2 = document.querySelector('.player-2');
+ var player1Name = document.querySelector('.player-name-1');
+ var player2Name = document.querySelector('.player-name-2');
+ 
+ var player1Score = document.querySelector('.player-score1');
+ var player2Score = document.querySelector('.player-score2');
+ var body = document.querySelector('body');
+ var mainJs = document.createElement('script');
+ mainJs.src = "https://azeembakhsh04.github.io/public/js/dialog.js";
+ body.appendChild(mainJs);
+ 
+ var dice = ['O','X'];
+ var changeNo = 0;
+ 
+ function myFun_1() {
+    b1.disabled = "true";
+    b1.value = dice[changeNo];
+ }
+ function myFun_2() {
+    b2.disabled = "true";
+    b2.value = dice[changeNo];
+ }
+ function myFun_3() {
+    b3.disabled = "true";
+    b3.value = dice[changeNo];
+ }
+ function myFun_4() {
+    b4.disabled = "true";
+    b4.value = dice[changeNo];
+ }
+ function myFun_5() {
+    b5.disabled = "true";
+    b5.value = dice[changeNo];
+ }
+ function myFun_6() {
+    b6.disabled = "true";
+    b6.value = dice[changeNo];
+ }
+ function myFun_7() {
+    b7.disabled = "true";
+    b7.value = dice[changeNo];
+ }
+ function myFun_8() {
+    b8.disabled = "true";
+    b8.value = dice[changeNo];
+ }
+ function myFun_9() {
+    b9.disabled = "true";
+    b9.value = dice[changeNo];
+ }
+ 
+ function winowner() {
+    
+     if (changeNo == 0) {
+        ++changeNo
+     } else {
+        --changeNo
+     }
+     
+     for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i].value == 'X') {
+           boxes[i].style.color = '#98B0FF';
+           boxes[i].style.textShadow = "0px 0px 3px #3A30FF";
+        } else {
+           boxes[i].style.color = '#98FFBA';
+           boxes[i].style.textShadow = "0px 0px px #AEE8C6"
+        }
+     }
+     
+     findWiner(b1, b2, b3, 'X')
+     findWiner(b4, b5, b6, 'X')
+     findWiner(b7, b8, b9, 'X')
+     findWiner(b1, b4, b7, 'X')
+     findWiner(b2, b5, b8, 'X')
+     findWiner(b3, b6, b9, 'X')
+     findWiner(b1, b5, b9, 'X')
+     findWiner(b3, b5, b7, 'X')
+     
+     findWiner(b1, b2, b3, 'O')
+     findWiner(b4, b5, b6, 'O')
+     findWiner(b7, b8, b9, 'O')
+     findWiner(b1, b4, b7, 'O')
+     findWiner(b2, b5, b8, 'O')
+     findWiner(b3, b6, b9, 'O')
+     findWiner(b1, b5, b9, 'O')
+     findWiner(b3, b5, b7, 'O')
+  
+    }
+ var p1Score = 0;
+ var p2Score = 0;
+ 
+ function findWiner(_target1, _target2, _target3, _target4) {
+   
+    if (_target1.value == _target4
+       && _target2.value == _target4 
+       && _target3.value == _target4 
+       ) {
+           _target1.style.color = 'red';
+           _target2.style.color = 'red';
+           _target3.style.color = 'red';
+           
+           setTimeout(function () {
+             if(_target4 == 'O') {
+               alert(player1Name.value + ' win');
+             } else {
+               alert(player2Name.value + ' win');
+            }
+           },500)
+           
+         for (var i = 0; i < boxes.length; i++) {
+              boxes[i].disabled = true;
+           }
+           
+         if (_target4 == 'O') {
+               player1Score.innerHTML = ++p1Score;
+           } else {
+              player2Score.innerHTML = ++p2Score;
+           }
+      } else {
+         var bes = b1.value + b2.value +
+            b3.value + b5.value +
+            b5.value + b6.value +
+            b7.value + b8.value +
+            b9.value;
+         mainJs.type = '';
+         if (bes.length > 8) {
+            setTimeout(function (){
+               for (var i = 0; i < boxes.length; i++) {
+                  boxes[i].value = null;
+                  boxes[i].style.color = null;
+                  boxes[i].disabled = false;
+               }
+            }, 1000)
+         }
+      }
+ }
+ 
+ function reStart() {
+    for(var i = 0; i < boxes.length; i++) {
+    boxes[i].value = null;
+    boxes[i].style.color = null;
+    boxes[i].disabled = false;
+    }
+ }
+ 
+    
+ </script>
+</body>
+
+</html>
