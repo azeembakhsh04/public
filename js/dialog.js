@@ -1,6 +1,6 @@
-var headImg = 'https://azeembakhsh04.github.io/public/images/programming-tasks-logo.png';
+var headImg = 'https://azeembakhsh04.github.io/public/images/azeemtech.jpg';
 
-headTxt = 'Programming Tasks';
+headTxt = 'Azeem Tech';
 var bodyTxt = 'The project designed and made by <b> Azeem Bakhsh </b>. Please support developer on social media platforms.'
 
 var positiveBtnLink = 'https://youtube.com/@programmingtasks'
@@ -161,16 +161,16 @@ var body = document.querySelector('body');
 
           <div class="social-icons">
                  <h4> Reach us: </h4>
-            <a href="https://www.youtube.com/@programmingtasks" target="_blink">
+            <a href="https://www.youtube.com/@azeemtech" target="_blink">
                <i class="bi-youtube"></i>
             </a>
-            <a href="https://www.facebook.com/programmingtasks" target="_blink">
+            <a href="https://www.facebook.com/azeemtech.page" target="_blink">
                <i class="bi-facebook"></i>
             </a>
             <a href="https://chat.whatsapp.com/HKQlptSnmPILRy5M1GnRIN" target="_blink">
                <i class="bi-whatsapp"></i>
             </a>
-            <a href="https://t.me/programmingtasksofficial" target="_blink">
+            <a href="https://t.me/azeemtech" target="_blink">
                <i class="bi-telegram"></i>
             </a>
           </div>
