@@ -170,7 +170,7 @@ var body = document.querySelector('body');
             <a href="https://chat.whatsapp.com/HKQlptSnmPILRy5M1GnRIN" target="_blink">
                <i class="bi-whatsapp"></i>
             </a>
-            <a href="https://t.me/azeemtech" target="_blink">
+            <a href="https://t.me/azeem_tech" target="_blink">
                <i class="bi-telegram"></i>
             </a>
           </div>
