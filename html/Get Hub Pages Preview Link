@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Pages Preview Generator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .container {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+
+  input[type="text"] {
+    width: calc(100% - 20px); /* Adjusting width to accommodate button padding */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  label {
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  .preview {
+    margin-top: 20px;
+  }
+
+  .open-link {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>GitHub Pages Preview Generator</h2>
+  <input type="text" id="folderNameInput" placeholder="Enter folder name">
+  <input type="text" id="fileNameInput" placeholder="Enter file name">
+  <label for="lowercaseCheckbox">
+  <input type="checkbox" id="lowercaseCheckbox"> Convert to lowercase
+</label>
+  <button id="generateButton">Generate Preview</button>
+  <div class="preview" id="preview"></div>
+  <div class="open-link" id="openLink"></div>
+</div>
+
+<script>
+  document.getElementById("generateButton").addEventListener("click", generatePreview);
+
+  function generatePreview() {
+    const folderName = document.getElementById("folderNameInput").value.trim();
+    const fileName = document.getElementById("fileNameInput").value.trim();
+    const lowercaseCheckbox = document.getElementById("lowercaseCheckbox");
+
+    if (folderName !== "" && fileName !== "") {
+      let transformedFolderName = folderName;
+      let transformedFileName = fileName;
+
+      if (lowercaseCheckbox.checked) {
+        transformedFolderName = folderName.toLowerCase();
+        transformedFileName = fileName.toLowerCase();
+      }
+
+      let encodedFileName = transformedFileName;
+      if (transformedFileName.includes(' ')) {
+        encodedFileName = encodeURIComponent(transformedFileName);
+      }
+
+      const previewURL = `https://azeembakhsh04.github.io/public/${transformedFolderName}/${encodedFileName}`;
+      document.getElementById("preview").innerHTML = `<a href="${previewURL}" target="_blank">Open Link</a>`;
+      document.getElementById("openLink").innerHTML = "";
+    } else {
+      document.getElementById("preview").innerHTML = "Please enter both folder name and file name!";
+      document.getElementById("openLink").innerHTML = "";
+    }
+  }
+</script>
+</body>
+</html>
