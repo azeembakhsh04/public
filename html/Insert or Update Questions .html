@@ -135,12 +135,23 @@ input[type="radio"] {
     const answer = document.getElementById("answerInput").value.trim();
     const inputPushId = document.getElementById("pushIdInput").value.trim();
     let pushId;
-    if(question.toLowerCase() !== 'developer' || question.toLowerCase() !== 'hi') {
-        pushId = '-' + inputPushId;
-     } else {
-      alert("To ensure the security and integrity of the stored value on Firebase, the developer has implemented security measures to prevent unauthorized modifications to the specified tag.")
-        pushId = 'non';
-    }
+    let privacy;
+    
+    if(question.toLowerCase() == 'developer') {
+       pushId =  '';
+       privacy = false;
+      } else {
+          if (question.toLowerCase() == 'hi') {
+              pushId = '';
+              privacy = false;
+             } else {
+                pushId = '-' + inputPushId;
+                privacy = true;
+          }
+      }
+     if (!privacy) {
+       alert("To ensure the security and integrity of the stored value on Firebase, the developer has implemented security measures to prevent unauthorized modifications to the specified tag.")
+     }
     const action = document.querySelector('input[name="action"]:checked').value;
 
     if (question !== "" && answer !== "") {
