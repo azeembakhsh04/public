@@ -123,7 +123,7 @@ input[type="radio"]:checked + label {
   <input type="text" id="pushIdInput" placeholder="Enter Question ID *">
   <input type="number" id="securityCodeInput" placeholder="Enter Security Code">
   <br>
-  <input type="checkbox" id="privacyCheckbox">
+  <input type="checkbox" id="privacyCheckbox" disabled>
   <label for="privacyCheckbox">Protect answer from update</label>
   <br>
   <button id="submitButton">Submit</button>
@@ -152,8 +152,19 @@ const db = getDatabase();
 const storage = getStorage();
 let action = document.getElementById("updateRadio");
 let securityCodeInput = document.getElementById("securityCodeInput");
-let securityCode = 5959;
+const privacyCheckbox = document.getElementById("privacyCheckbox");
+const cDate = new Date();
+let a = cDate.getMonth() + cDate.getDate() + cDate.getYear();
+let securityCode = a * cDate.getDate() * cDate.getHours();
 let privacyAlert = "To ensure the security and integrity of the stored value on Firebase, the developer has implemented security measures to prevent unauthorized modifications to the specified tag.";
+
+export function enableFeatures() {
+  privacyCheckbox.disabled = false;
+  console.log('Protect answer from update Successfully enabled')
+  console.log(`The security code is ${securityCode}`)
+}
+window.enableFeatures = enableFeatures;
+console.log("enableFeatures() run this function");
 
 setInterval(function(){
     var pushIdInput = document.getElementById("pushIdInput");
@@ -171,7 +182,6 @@ function storeQuestion() {
     const answer = document.getElementById("answerInput").value.trim();
     const inputPushID = document.getElementById("pushIdInput").value.trim(); 
     const pushId = "-" + inputPushID;// Retrieve pushId value
-    const privacyCheckbox = document.getElementById("privacyCheckbox");
     const isProtected = privacyCheckbox.checked;
 
     if (question !== "" && answer !== "") {
@@ -266,12 +276,15 @@ function checkQuestionMatch(pushId, question, answer, isProtected) {
         const currentPrivacy = data.privacy; // Retrieve current privacy status from the database
 
         if (currentPrivacy) {
-          securityCodeInput.style.display = 'block';
-          if (securityCodeInput.value.trim() !== securityCode) {
-           alert("This question is protected. You cannot update it.");
-           return; // Exit the function if the question is protected
-          }
-        }
+    securityCodeInput.style.display = 'block';
+    if (securityCodeInput.value.trim() !== securityCode.toString()) {
+        console.log('Entered code: ' + securityCodeInput.value.trim());
+        console.log('Security code: ' + securityCode);
+        alert(privacyAlert);
+        return; // Exit the function if the security code is incorrect
+    }
+}
+
 
         if (data.question.toLowerCase() === question.toLowerCase()) {
             updateQuestion(pushId, answer, isProtected);
