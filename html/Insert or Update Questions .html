@@ -32,6 +32,9 @@
     border: 1px solid #ccc;
     box-sizing: border-box;
   }
+  #securityCodeInput {
+    display: none;
+  }
   textarea {
     height: 200px;
   }
@@ -118,6 +121,8 @@ input[type="radio"]:checked + label {
   <input type="text" id="questionInput" placeholder="Enter your question">
   <textarea id="answerInput" placeholder="Enter the answer"></textarea>
   <input type="text" id="pushIdInput" placeholder="Enter Question ID *">
+  <input type="number" id="securityCodeInput" placeholder="Enter Security Code">
+  <br>
   <input type="checkbox" id="privacyCheckbox">
   <label for="privacyCheckbox">Protect answer from update</label>
   <br>
@@ -146,15 +151,17 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const storage = getStorage();
 let action = document.getElementById("updateRadio");
+let securityCodeInput = document.getElementById("securityCodeInput");
+let securityCode = 5959;
 let privacyAlert = "To ensure the security and integrity of the stored value on Firebase, the developer has implemented security measures to prevent unauthorized modifications to the specified tag.";
 
 setInterval(function(){
     var pushIdInput = document.getElementById("pushIdInput");
     if (action.checked) {
-        pushIdInput.style.display = "block"; // Show push ID input when "Update Question" is checked
-    } else {
-        pushIdInput.style.display = "none"; // Hide push ID input otherwise
-    }
+        pushIdInput.style.display = "block";
+        } else {
+        pushIdInput.style.display = "none"; 
+        }
 }, 100);
 
 document.getElementById('submitButton').addEventListener('click', storeQuestion);
@@ -169,7 +176,7 @@ function storeQuestion() {
 
     if (question !== "" && answer !== "") {
         if (action.checked) {
-            if (pushId !== "") {
+            if (pushId.length >! 1) {
                 checkQuestionMatch(pushId, question, answer, isProtected);
             } else {
                 document.getElementById("hint").innerText = "Please enter a valid push ID!";
@@ -210,14 +217,14 @@ function addNewQuestion(question, answer, isProtected) {
             document.getElementById("hint").innerText = "Question does not exist in the database!";
             return;
         }
-
+        /*
         const { privacy } = data;
-
+        console.log(privacy);
         if (privacy && isProtected) {
             alert(privacyAlert);
             return;
         }
-
+        */
         update(questionRef, {
             answer: answer,
             privacy: isProtected // Update privacy state with checkbox value
@@ -252,15 +259,18 @@ function checkQuestionMatch(pushId, question, answer, isProtected) {
         const data = snapshot.val();
 
         if (!data) {
-            document.getElementById("hint").innerText = "Question does not exist in the database!";
-            return;
+          document.getElementById("hint").innerText = "Question does not exist in the database!";
+           return;
         }
 
         const currentPrivacy = data.privacy; // Retrieve current privacy status from the database
 
         if (currentPrivacy) {
-            alert("This question is protected. You cannot update it.");
-            return; // Exit the function if the question is protected
+          securityCodeInput.style.display = 'block';
+          if (securityCodeInput.value.trim() !== securityCode) {
+           alert("This question is protected. You cannot update it.");
+           return; // Exit the function if the question is protected
+          }
         }
 
         if (data.question.toLowerCase() === question.toLowerCase()) {
