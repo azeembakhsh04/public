@@ -17,7 +17,7 @@
   }
   
   .container {
-    width: 400px;
+    width: 300px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -32,9 +32,24 @@
     border: 1px solid #ccc;
     box-sizing: border-box;
   }
- textarea {
-   height: auto;
+  textarea {
+    height: 200px;
   }
+  input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+  #privacyCheckboxLabel {
+    display: block;
+  }
+  #privacyCheckbox {
+    font-size: 10px; /* Adjust font size */
+    color: #333; /* Adjust color */
+    font-weight: bold; /* Make the text bold */
+    display: auto; /* Ensure it's displayed as a block element */
+    margin-bottom: 10px; /* Add some top margin for spacing */
+}
+
 
   button {
     background-color: #4CAF50;
@@ -58,19 +73,30 @@
     font-size: 12px;
     color: #999;
   }
- .radio-group {
+.radio-group {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-betwee;
+    text-align: center;
     margin-bottom: 10px;
-  }
-  .radio-label {
-      margin-right: 5px; /* Adjust the right margin as needed */
-   }
-
-input[type="radio"] {
-  margin-right: 5px; /* Adjust the right margin as needed */
 }
 
+.radio-label {
+    margin-right: 15px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Style for checked radio button */
+input[type="radio"]:checked + label {
+    color: #4CAF50; /* Change color when checked */
+    font-weight: bold; /* Make text bold when checked */
+}
+.radio-label {
+  margin-right: 25px;
+  /* Increase margin between radio button and label */
+}
 
   #pushIdInput {
     display: none; /* Hide push ID input by default */
@@ -82,16 +108,19 @@ input[type="radio"] {
 <body>
   
 <div class="container">
-  <h2>Question Answer App</h2>
+  <h2 style="text-align: center;"> Store your questions and answers </h2>
  <div class="radio-group">
   <input type="radio" id="insertRadio" name="action" value="insert" checked>
-  <label class="radio-label" for="insertRadio">Insert</label>
+  <label class="radio-label" for="insertRadio">Set</label>
   <input type="radio" id="updateRadio" name="action" value="update">
-  <label class="radio-label" for="updateRadio">Update</label>
+  <label class="radio-label" for="updateRadio">Upadte</label>
 </div>
   <input type="text" id="questionInput" placeholder="Enter your question">
   <textarea id="answerInput" placeholder="Enter the answer"></textarea>
-  <input type="text" id="pushIdInput" placeholder="Enter push ID (optional)">
+  <input type="text" id="pushIdInput" placeholder="Enter Question ID *">
+  <input type="checkbox" id="privacyCheckbox">
+  <label for="privacyCheckbox">Protect answer from update</label>
+  <br>
   <button id="submitButton">Submit</button>
   <div class="answer" id="answer"></div>
   <div class="hint" id="hint"></div>
@@ -99,7 +128,7 @@ input[type="radio"] {
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-  import { getDatabase, push, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+  import { getDatabase, push, ref, onValue, set, get, update } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
   import { getStorage, ref as storageRef, uploadBytes } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
 
   let firebaseConfig = {
@@ -113,112 +142,55 @@ input[type="radio"] {
     measurementId: "G-VKP3KD919K"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase();
-  const storage = getStorage();
-  var rodio = document.getElementById("updateRadio");
-  
-  setInterval(function(){
-   var pushIdInput = document.getElementById("pushIdInput");
-  if (rodio.checked) {
-    pushIdInput.style.display = "block"; // Show push ID input when "Update Question" is checked
-  } else {
-    pushIdInput.style.display = "none"; // Hide push ID input otherwise
-  }
-  }, 100)
-  
-  document.getElementById('submitButton').addEventListener('click', storeQuestion)
+const app = initializeApp(firebaseConfig);
+const db = getDatabase();
+const storage = getStorage();
+let action = document.getElementById("updateRadio");
+let privacyAlert = "To ensure the security and integrity of the stored value on Firebase, the developer has implemented security measures to prevent unauthorized modifications to the specified tag.";
 
+setInterval(function(){
+    var pushIdInput = document.getElementById("pushIdInput");
+    if (action.checked) {
+        pushIdInput.style.display = "block"; // Show push ID input when "Update Question" is checked
+    } else {
+        pushIdInput.style.display = "none"; // Hide push ID input otherwise
+    }
+}, 100);
 
- function storeQuestion() {
+document.getElementById('submitButton').addEventListener('click', storeQuestion);
+
+function storeQuestion() {
     const question = document.getElementById("questionInput").value.trim();
     const answer = document.getElementById("answerInput").value.trim();
-    const inputPushId = document.getElementById("pushIdInput").value.trim();
-    let pushId;
-    let privacy;
-    
-    if(question.toLowerCase() == 'developer') {
-       pushId =  '';
-       privacy = false;
-      } else {
-          if (question.toLowerCase() == 'hi') {
-              pushId = '';
-              privacy = false;
-             } else {
-               if(question.toLowerCase() == "Add your question") {
-             pushId = '';
-             privacy = false;   
-           } else {
-            pushId = '-' + inputPushId;
-            privacy = true;
-            }
-          }
-      }
-     if (!privacy) {
-       alert("To ensure the security and integrity of the stored value on Firebase, the developer has implemented security measures to prevent unauthorized modifications to the specified tag.")
-     }
-    const action = document.querySelector('input[name="action"]:checked').value;
+    const inputPushID = document.getElementById("pushIdInput").value.trim(); 
+    const pushId = "-" + inputPushID;// Retrieve pushId value
+    const privacyCheckbox = document.getElementById("privacyCheckbox");
+    const isProtected = privacyCheckbox.checked;
 
     if (question !== "" && answer !== "") {
-        if (action === "insert") {
-            checkQuestionExists(question, answer);
-        } else if (action === "update") {
+        if (action.checked) {
             if (pushId !== "") {
-                checkQuestionMatch(pushId, question, answer);
+                checkQuestionMatch(pushId, question, answer, isProtected);
             } else {
                 document.getElementById("hint").innerText = "Please enter a valid push ID!";
             }
+        } else {
+          checkQuestionExists(question, answer, isProtected);
+          //addNewQuestion(question, answer, isProtected);
         }
     } else {
         document.getElementById("hint").innerText = "Please enter both question and answer!";
     }
 }
 
-function checkQuestionExists(question, answer) {
-    onValue(ref(db, 'questions'), (snapshot) => {
-        const data = snapshot.val();
-        for (const key in data) {
-            if (data[key].question.toLowerCase() === question.toLowerCase()) {
-                document.getElementById("hint").innerText = "This question is already stored! Question ID: " + key ;
-                return;
-            }
-        }
-        addNewQuestion(question, answer);
-    });
-}
-
-function checkQuestionMatch(pushId, question, answer) {
-    onValue(ref(db, 'questions'), (snapshot) => {
-        const data = snapshot.val();
-        let questionId = null;
-        for (const key in data) {
-            if (data[key].question.toLowerCase() === question.toLowerCase()) {
-                questionId = key;
-                break;
-            }
-        }
-
-        if (questionId) {
-            if (questionId == pushId) {
-                updateQuestion(pushId, answer);
-            } else {
-                document.getElementById("hint").innerText = "Provided push ID does not match the question!";
-            }
-        } else {
-            document.getElementById("hint").innerText = "Question does not exist in the database!";
-        }
-    });
-}
-
-
-
-function addNewQuestion(question, answer) {
+function addNewQuestion(question, answer, isProtected) {
     const newQuestionRef = push(ref(db, 'questions'));
     const newQuestionId = newQuestionRef.key;
 
     set(newQuestionRef, {
         question: question,
-        answer: answer
+        answer: answer,
+        privacy: isProtected // Store checkbox value directly as privacy state
     }).then(() => {
         document.getElementById("hint").innerText = "Question added successfully!";
         document.getElementById("hint").innerText += "\nQuestion ID: " + newQuestionId;
@@ -228,17 +200,78 @@ function addNewQuestion(question, answer) {
     });
 }
 
-function updateQuestion(pushId, answer) {
-    set(ref(db, 'questions/' + pushId + '/answer'), answer)
-        .then(() => {
+  function updateQuestion(pushId, answer, isProtected) {
+    const questionRef = ref(db, 'questions/' + pushId);
+
+    get(questionRef).then((snapshot) => {
+        const data = snapshot.val();
+
+        if (!data) {
+            document.getElementById("hint").innerText = "Question does not exist in the database!";
+            return;
+        }
+
+        const { privacy } = data;
+
+        if (privacy && isProtected) {
+            alert(privacyAlert);
+            return;
+        }
+
+        update(questionRef, {
+            answer: answer,
+            privacy: isProtected // Update privacy state with checkbox value
+        }).then(() => {
             document.getElementById("hint").innerText = "Question updated successfully!";
             document.getElementById("hint").innerText += "\nQuestion ID: " + pushId;
-        })
-        .catch((error) => {
+        }).catch((error) => {
             console.error("Error updating question:", error);
             document.getElementById("hint").innerText = "Error updating question!";
         });
+    });
 }
+
+
+function checkQuestionExists(question, answer, isProtected) {
+    onValue(ref(db, 'questions'), (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            for (const key in data) {
+                if (data[key].question && data[key].question.toLowerCase() === question.toLowerCase()) {
+                    document.getElementById("hint").innerText = "This question is already stored! Question ID: " + key ;
+                    return;
+                }
+            }
+        }
+        addNewQuestion(question, answer, isProtected);
+    });
+}
+
+function checkQuestionMatch(pushId, question, answer, isProtected) {
+    onValue(ref(db, 'questions/' + pushId), (snapshot) => {
+        const data = snapshot.val();
+
+        if (!data) {
+            document.getElementById("hint").innerText = "Question does not exist in the database!";
+            return;
+        }
+
+        const currentPrivacy = data.privacy; // Retrieve current privacy status from the database
+
+        if (currentPrivacy) {
+            alert("This question is protected. You cannot update it.");
+            return; // Exit the function if the question is protected
+        }
+
+        if (data.question.toLowerCase() === question.toLowerCase()) {
+            updateQuestion(pushId, answer, isProtected);
+        } else {
+            document.getElementById("hint").innerText = "Provided push ID does not match the question!";
+        }
+    });
+}
+
+
 
 </script>
 </body>
