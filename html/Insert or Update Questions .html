@@ -145,8 +145,13 @@ input[type="radio"] {
               pushId = '';
               privacy = false;
              } else {
-                pushId = '-' + inputPushId;
-                privacy = true;
+               if(question.toLowerCase() == "Add your question") {
+             pushId = '';
+             privacy = false;   
+           } else {
+            pushId = '-' + inputPushId;
+            privacy = true;
+            }
           }
       }
      if (!privacy) {
