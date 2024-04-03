@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat App</title>
 <style>
+/* Styles for body when popup is displayed */
+body.popup-visible {
+  overflow: hidden;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f2f2f2;
@@ -83,6 +88,22 @@ body {
   width: 92%;
   padding: 15px;
 }
+.chat-input button#addButton {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .chat-input input[type="text"] {
   flex: 1;
@@ -130,6 +151,61 @@ body {
   align-items: flex-end; /* Align messages to the end of the container */
 }
 
+/* Styles for the search input */
+#searchInput {
+    position: relative;
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+/* Styles for the pop-up dialog */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; /* Adjust width as needed */
+    max-width: 90%; /* Set a maximum width */
+    max-height: 90%; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+
+/* Styles for the list of questions */
+.question-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.question-item:hover {
+    background-color: #f2f2f2;
+}
+
+
+@media screen and (max-width: 600px) {
+    .chat-input input[type="text"] {
+        width: 70%; /* Adjust width for smaller screens */
+    }
+}
+
 </style>
 </head>
 <body>
@@ -137,9 +213,18 @@ body {
   <div class="chat-header">Chat with Firebase</div>
   <div class="chat-messages" id="chatMessages"></div>
   <div class="chat-input">
+    <button id="addButton">+</button>
     <input type="text" id="messageInput" placeholder="Type your message...">
     <button id="sendButton">Send</button>
   </div>
+</div>
+<!-- Pop-up dialog -->
+<div class="popup" id="popupDialog">
+    <div class="popup-content">
+        <span class="close" id="closePopup">&times;</span>
+        <input type="text" id="searchInput" placeholder="Search questions...">
+        <div id="questionsList"></div> <!-- Add this line -->
+    </div>
 </div>
 
 <script type="module">
@@ -162,6 +247,9 @@ let firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 
+let allQuestions = []; // Global variable to store all questions
+
+  
 // Event listener for sending messages
 document.getElementById("sendButton").addEventListener("click", sendMessage);
 
@@ -177,7 +265,7 @@ function sendMessage() {
 }
 
 // Function to display a message on the chat board
-// Function to display a message on the chat board
+
 function displayMessage(message, isUserMessage = true) {
   const chatMessages = document.getElementById("chatMessages");
   const messageDiv = document.createElement("div");
@@ -197,7 +285,6 @@ function displayLoading() {
   chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom of chat
 }
 
-// Function to fetch reply from Firebase based on user's message
 // Function to fetch reply from Firebase based on user's message
 function getReply(question) {
   // Fetch answer from Firebase based on user's question
@@ -231,20 +318,6 @@ function getReply(question) {
 }
 
 
-/*// Function to display reply on the chat board
-function displayReply(reply) {
-  const chatMessages = document.getElementById("chatMessages");
-  const loadingDiv = chatMessages.querySelector(".loading");
-  if (loadingDiv) {
-    loadingDiv.remove(); // Remove loading indicator
-  }
-  const replyDiv = document.createElement("div");
-  replyDiv.classList.add("reply");
-  replyDiv.textContent = reply;
-  chatMessages.appendChild(replyDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom of chat
-}
-*/
 // Function to inform user if no matching answer found
 function displayNoAnswer() {
   const chatMessages = document.getElementById("chatMessages");
@@ -254,10 +327,82 @@ function displayNoAnswer() {
   }
   const noAnswerDiv = document.createElement("div");
   noAnswerDiv.classList.add("no-answer");
-  displayMessage("Sorry, we don't have an answer for your question. if you store your answer of your question click this link <a href='https://azeembakhsh04.github.io/public/html/%2FInsert%20or%20Update%20Questions%20.html' target='_blank'> Store your question </a>", false)
+  displayMessage("Sorry, we don't have an answer for your question. if you store your answer of your question click this link <a href='#' target='_blank'> Store this value </a>", false)
   chatMessages.appendChild(noAnswerDiv);
   chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom of chat
 }
+
+// Event listener for plus button to display popup dialog
+document.getElementById("addButton").addEventListener("click", displayPopup);
+
+// Function to display the popup dialog
+function displayPopup() {
+  const popup = document.getElementById("popupDialog");
+  popup.style.display = "block"; // Show the popup dialog
+  document.body.classList.add("popup-visible"); // Add class to body to disable scrolling
+  fetchQuestionsFromFirebase(); // Fetch questions from Firebase and populate the popup
+}
+
+// Event listener for close button to close popup dialog
+document.getElementById("closePopup").addEventListener("click", closePopup);
+
+// Function to close the popup dialog
+function closePopup() {
+  const popup = document.getElementById("popupDialog");
+  popup.style.display = "none"; // Hide the popup dialog
+  document.body.classList.remove("popup-visible"); // Remove class from body to enable scrolling
+}
+
+// Function to fetch questions from Firebase
+function fetchQuestionsFromFirebase() {
+  get(ref(db, 'questions')).then(snapshot => {
+    if (snapshot.exists()) {
+      const questionsObject = snapshot.val();
+      const questions = Object.values(questionsObject).map(question => question.question);
+      allQuestions = questions; // Store all questions
+      displayQuestions(questions);
+    } else {
+      console.error("No questions found in the Firebase database.");
+    }
+  }).catch(error => {
+    console.error("Error getting questions from Firebase:", error);
+  });
+}
+
+// Function to display questions in the popup dialog
+function displayQuestions(questions) {
+  const questionsList = document.getElementById("questionsList");
+  questionsList.innerHTML = ""; // Clear previous questions
+  questions.forEach(question => {
+    const questionDiv = document.createElement("div");
+    questionDiv.classList.add("question-item");
+    questionDiv.textContent = question;
+    questionDiv.addEventListener("click", () => {
+      insertQuestionIntoInput(question);
+      closePopup();
+    });
+    questionsList.appendChild(questionDiv);
+  });
+}
+
+// Function to insert clicked question into input message
+function insertQuestionIntoInput(question) {
+  const messageInput = document.getElementById("messageInput");
+  messageInput.value = question;
+}
+
+// Add event listener for search input
+document.getElementById("searchInput").addEventListener("input", handleSearch);
+
+// Function to handle search input
+function handleSearch() {
+  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+  const filteredQuestions = allQuestions.filter(question =>
+    question.toLowerCase().includes(searchTerm)
+  );
+  displayQuestions(filteredQuestions);
+}
+
 
 </script>
 </body>
