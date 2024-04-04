@@ -1,260 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Calling Project</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-    
-    #container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    
-    #video-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      border-radius: 10px;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Calling</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    video {
-      width: 100%;
-      max-width: 300px;
-      height: auto;
-      margin-bottom: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
+        .container {
+            display: flex;
+            flex-direction: column;
+        }
 
-    #button-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
+        video {
+            width: 320px;
+            height: 240px;
+            margin-bottom: 10px;
+        }
 
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #007bff;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+        }
+    </style>
 </head>
 <body>
-  <div id="container">
-    <div id="video-container" class="container">
-      <video id="local-video" autoplay muted></video>
-      <video id="remote-video" autoplay></video>
-      <div id="button-container">
-        <button id="start-call-btn"><i class="bi bi-telephone-fill"></i></button>
-        <button id="accept-call-btn"><i class="bi bi-telephone-inbound-fill"></i></button>
-        <button id="end-call-btn"><i class="bi bi-telephone-x-fill"></i></button>
-      </div>
+    <div class="container">
+        <video id="localVideo" autoplay muted></video> <!-- Local video element -->
+        <video id="remoteVideo" autoplay></video> <!-- Remote video element -->
+        <button id="startButton">Start Call</button> <!-- Button to start the call -->
+        <button id="acceptButton" style="display: none;">Accept Call</button> <!-- Button to accept incoming call -->
+        <button id="rejectButton" style="display: none;">Reject Call</button> <!-- Button to reject incoming call -->
+        <button id="hangupButton" style="display: none;">Hang Up</button> <!-- Button to end the call -->
     </div>
-  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
-    import {Peer} from "https://esm.sh/peerjs@1.5.2?bundle-deps"
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyC8r7bnpz2HZ3itwcAFoGSq6MuXzgGXrsI",
-      authDomain: "azeem-tech.firebaseapp.com",
-      databaseURL: "https://azeem-tech-default-rtdb.firebaseio.com",
-      projectId: "azeem-tech",
-      storageBucket: "azeem-tech.appspot.com",
-      messagingSenderId: "362146826134",
-      appId: "1:362146826134:web:5003ae07ff2f0cef14ffb7",
-      measurementId: "G-VKP3KD919K"
-    };
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+        import Peer from "https://esm.sh/peerjs@1.5.2?bundle-deps";
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase();
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8r7bnpz2HZ3itwcAFoGSq6MuXzgGXrsI",
+  authDomain: "azeem-tech.firebaseapp.com",
+  databaseURL: "https://azeem-tech-default-rtdb.firebaseio.com",
+  projectId: "azeem-tech",
+  storageBucket: "azeem-tech.appspot.com",
+  messagingSenderId: "362146826134",
+  appId: "1:362146826134:web:5003ae07ff2f0cef14ffb7",
+  measurementId: "G-VKP3KD919K"
+};
 
-    let localStream;
-    let peerConnection;
-    let remoteStream;
-          // Initialize PeerJS
-    const peer = new Peer();
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
 
-// Event listener for PeerJS connection open event
-peer.on('open', (id) => {
-  console.log('Peer ID:', id);
-});
+        const startButton = document.getElementById('startButton');
+        const acceptButton = document.getElementById('acceptButton');
+        const rejectButton = document.getElementById('rejectButton');
+        const hangupButton = document.getElementById('hangupButton');
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        let localStream;
+        let remoteStream;
+        let peer;
+        let currentCall;
 
-// Event listener for PeerJS error event
-peer.on('error', (error) => {
-  console.error('PeerJS Error:', error);
-});
+        // Function to start the call
+        async function startCall() {
+            try {
+                // Get local media stream
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
 
-// Event listener for incoming connections
-peer.on('call', (incomingCall) => {
-  // Notify the user about the incoming call
-  console.log('Incoming call...');
+                // Create PeerConnection object using PeerJS
+                peer = new Peer();
 
-  // Display UI to the user to accept or reject the call
-  const acceptCall = confirm('Incoming call! Do you want to accept?');
-  
-  if (acceptCall) {
-    // Answer the call and establish a connection
-    incomingCall.answer(localStream);
+                // Event listener for receiving call
+                peer.on('call', call => {
+                    currentCall = call;
+                    acceptButton.style.display = 'inline-block'; // Show accept button
+                    rejectButton.style.display = 'inline-block'; // Show reject button
+                });
+            } catch (err) {
+                console.error('Error starting call:', err);
+            }
+        }
 
-    // Handle the stream when it's received
-    incomingCall.on('stream', (remoteStream) => {
-      // Display the remote stream in the remote video element
-      remoteVideo.srcObject = remoteStream;
-    });
+        // Function to accept incoming call
+        acceptButton.addEventListener('click', acceptCall);
 
-    // Handle errors, if any
-    incomingCall.on('error', (error) => {
-      console.error('Call error:', error);
-    });
-  } else {
-    // Reject the call
-    console.log('Call rejected.');
-  }
-});
+        function acceptCall() {
+            currentCall.answer(localStream); // Answer the call with local stream
+            currentCall.on('stream', remoteStream => {
+                remoteVideo.srcObject = remoteStream; // Display remote stream
+            });
+            acceptButton.style.display = 'none'; // Hide accept button
+            rejectButton.style.display = 'none'; // Hide reject button
+            hangupButton.style.display = 'inline-block'; // Show hang up button
+        }
 
+        // Function to reject incoming call
+        rejectButton.addEventListener('click', rejectCall);
 
+        function rejectCall() {
+            currentCall.close(); // Close the call
+            acceptButton.style.display = 'none'; // Hide accept button
+            rejectButton.style.display = 'none'; // Hide reject button
+        }
 
-    async function startStream() {
-      try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        const localVideo = document.getElementById('local-video');
-        localVideo.srcObject = localStream;
-      } catch (error) {
-        console.error('Error accessing media devices:', error);
-      }
-    }
+        // Function to end the call
+        hangupButton.addEventListener('click', hangUp);
 
-    startStream();
+        function hangUp() {
+            localStream.getTracks().forEach(track => track.stop());
+            localVideo.srcObject = null;
+            remoteVideo.srcObject = null;
+            peer.destroy(); // Destroy PeerJS connection
+            hangupButton.style.display = 'none'; // Hide hang up button
+        }
 
-    // JavaScript code for video calling project and Firebase integration...
-    const remoteVideo = document.getElementById('remote-video');
-
-    // Function to send signaling data to Firebase
-    function sendSignal(data) {
-      push(ref(db, "VideoCalling"), data);
-    }
-
-    // Function to handle incoming signaling data
-    onValue(ref(db, "VideoCalling"), (snapshot) => {
-      const data = snapshot.val();
-      // Process signaling data (offer, answer, ICE candidates)
-      handleSignalData(data);
-    });
-
-    // Function to initiate a call
-    function initiateCall() {
-      console.log("Initiating call...");
-      createPeerConnection();
-      localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-    }
-
-    // Function to accept a call
-    function acceptCall() {
-      console.log("Accepting call...");
-      createPeerConnection();
-      localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-      sendSignal({ type: 'acceptCall' });
-    }
-
-    // Function to end the call
-    function endCall() {
-      console.log("Ending call...");
-      // Placeholder code for closing peer connection, removing video streams, and updating UI
-      peerConnection.close();
-      remoteVideo.srcObject = null;
-    }
-
-    // Function to handle signaling data
-    function handleSignalData(data) {
-      if (data.type === 'offer') {
-        console.log("Received offer...");
-        createPeerConnection();
-        const offerDescription = new RTCSessionDescription(data.offer);
-        peerConnection.setRemoteDescription(offerDescription)
-          .then(() => {
-            return navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-          })
-          .then(stream => {
-            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-          })
-          .then(() => {
-            return peerConnection.createAnswer();
-          })
-          .then(answer => {
-            return peerConnection.setLocalDescription(answer);
-          })
-          .then(() => {
-            sendSignal({ type: 'answer', answer: peerConnection.localDescription });
-          })
-          .catch(error => {
-            console.error('Error handling offer:', error);
-          });
-      } else if (data.type === 'answer') {
-        console.log("Received answer...");
-        const answerDescription = new RTCSessionDescription(data.answer);
-        peerConnection.setRemoteDescription(answerDescription);
-      } else if (data.type === 'candidate') {
-        console.log("Received ICE candidate...");
-        const candidate = new RTCIceCandidate(data.candidate);
-        peerConnection.addIceCandidate(candidate);
-      } else if (data.type === 'acceptCall') {
-        console.log("Remote user accepted the call...");
-        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-      }
-    }
-
-    // Function to create peer connection
-    function createPeerConnection() {
-      peerConnection = new RTCPeerConnection();
-      peerConnection.ontrack = handleTrack;
-      peerConnection.onicecandidate = handleICECandidate;
-    }
-
-    // Function to handle incoming tracks
-    function handleTrack(event) {
-      remoteVideo.srcObject = event.streams[0];
-    }
-
-    // Function to handle ICE candidate
-    function handleICECandidate(event) {
-      if (event.candidate) {
-        sendSignal({ type: 'candidate', candidate: event.candidate });
-      }
-    }
- 
-    // Event listeners for call buttons
-    document.getElementById('start-call-btn').addEventListener('click', initiateCall);
-    document.getElementById('accept-call-btn').addEventListener('click', acceptCall);
-    document.getElementById('end-call-btn').addEventListener('click', endCall);
-  
-  </script>
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-  
+        startButton.addEventListener('click', startCall);
+    </script>
 </body>
 </html>
