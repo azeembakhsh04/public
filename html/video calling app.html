@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Calling Project</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    #container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    #video-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    video {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="video-container" class="container">
+      <video id="local-video" autoplay muted></video>
+      <video id="remote-video" autoplay></video>
+      <div id="button-container">
+        <button id="start-call-btn"><i class="bi bi-telephone-fill"></i></button>
+        <button id="accept-call-btn"><i class="bi bi-telephone-inbound-fill"></i></button>
+        <button id="end-call-btn"><i class="bi bi-telephone-x-fill"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "azeem-tech.firebaseapp.com",
+      databaseURL: "https://azeem-tech-default-rtdb.firebaseio.com",
+      projectId: "azeem-tech",
+      storageBucket: "azeem-tech.appspot.com",
+      messagingSenderId: "362146826134",
+      appId: "1:362146826134:web:5003ae07ff2f0cef14ffb7",
+      measurementId: "G-VKP3KD919K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+
+    let localStream;
+    let peerConnection;
+    let remoteStream;
+
+    async function startStream() {
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        const localVideo = document.getElementById('local-video');
+        localVideo.srcObject = localStream;
+      } catch (error) {
+        console.error('Error accessing media devices:', error);
+      }
+    }
+
+    startStream();
+
+    // JavaScript code for video calling project and Firebase integration...
+    const remoteVideo = document.getElementById('remote-video');
+
+    // Function to send signaling data to Firebase
+    function sendSignal(data) {
+      push(ref(db, "VideoCalling"), data);
+    }
+
+    // Function to handle incoming signaling data
+    onValue(ref(db, "VideoCalling"), (snapshot) => {
+      const data = snapshot.val();
+      // Process signaling data (offer, answer, ICE candidates)
+      handleSignalData(data);
+    });
+
+    // Function to initiate a call
+    function initiateCall() {
+      console.log("Initiating call...");
+      createPeerConnection();
+      localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+    }
+
+    // Function to accept a call
+    function acceptCall() {
+      console.log("Accepting call...");
+      createPeerConnection();
+      localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+      sendSignal({ type: 'acceptCall' });
+    }
+
+    // Function to end the call
+    function endCall() {
+      console.log("Ending call...");
+      // Placeholder code for closing peer connection, removing video streams, and updating UI
+      peerConnection.close();
+      remoteVideo.srcObject = null;
+    }
+
+    // Function to handle signaling data
+    function handleSignalData(data) {
+      if (data.type === 'offer') {
+        console.log("Received offer...");
+        createPeerConnection();
+        const offerDescription = new RTCSessionDescription(data.offer);
+        peerConnection.setRemoteDescription(offerDescription)
+          .then(() => {
+            return navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          })
+          .then(stream => {
+            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+          })
+          .then(() => {
+            return peerConnection.createAnswer();
+          })
+          .then(answer => {
+            return peerConnection.setLocalDescription(answer);
+          })
+          .then(() => {
+            sendSignal({ type: 'answer', answer: peerConnection.localDescription });
+          })
+          .catch(error => {
+            console.error('Error handling offer:', error);
+          });
+      } else if (data.type === 'answer') {
+        console.log("Received answer...");
+        const answerDescription = new RTCSessionDescription(data.answer);
+        peerConnection.setRemoteDescription(answerDescription);
+      } else if (data.type === 'candidate') {
+        console.log("Received ICE candidate...");
+        const candidate = new RTCIceCandidate(data.candidate);
+        peerConnection.addIceCandidate(candidate);
+      } else if (data.type === 'acceptCall') {
+        console.log("Remote user accepted the call...");
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+      }
+    }
+
+    // Function to create peer connection
+    function createPeerConnection() {
+      peerConnection = new RTCPeerConnection();
+      peerConnection.ontrack = handleTrack;
+      peerConnection.onicecandidate = handleICECandidate;
+    }
+
+    // Function to handle incoming tracks
+    function handleTrack(event) {
+      remoteVideo.srcObject = event.streams[0];
+    }
+
+    // Function to handle ICE candidate
+    function handleICECandidate(event) {
+      if (event.candidate) {
+        sendSignal({ type: 'candidate', candidate: event.candidate });
+      }
+    }
+ 
+    // Event listeners for call buttons
+    document.getElementById('start-call-btn').addEventListener('click', initiateCall);
+    document.getElementById('accept-call-btn').addEventListener('click', acceptCall);
+    document.getElementById('end-call-btn').addEventListener('click', endCall);
+  
+  
+  </script>
+</body>
+</html>
