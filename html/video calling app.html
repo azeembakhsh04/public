@@ -110,6 +110,35 @@ peer.on('error', (error) => {
   console.error('PeerJS Error:', error);
 });
 
+// Event listener for incoming connections
+peer.on('call', (incomingCall) => {
+  // Notify the user about the incoming call
+  console.log('Incoming call...');
+
+  // Display UI to the user to accept or reject the call
+  const acceptCall = confirm('Incoming call! Do you want to accept?');
+  
+  if (acceptCall) {
+    // Answer the call and establish a connection
+    incomingCall.answer(localStream);
+
+    // Handle the stream when it's received
+    incomingCall.on('stream', (remoteStream) => {
+      // Display the remote stream in the remote video element
+      remoteVideo.srcObject = remoteStream;
+    });
+
+    // Handle errors, if any
+    incomingCall.on('error', (error) => {
+      console.error('Call error:', error);
+    });
+  } else {
+    // Reject the call
+    console.log('Call rejected.');
+  }
+});
+
+
 
     async function startStream() {
       try {
