@@ -78,7 +78,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
-
+    import {Peer} from "https://esm.sh/peerjs@1.5.2?bundle-deps"
+    
     const firebaseConfig = {
       apiKey: "AIzaSyC8r7bnpz2HZ3itwcAFoGSq6MuXzgGXrsI",
       authDomain: "azeem-tech.firebaseapp.com",
@@ -96,6 +97,19 @@
     let localStream;
     let peerConnection;
     let remoteStream;
+          // Initialize PeerJS
+    const peer = new Peer();
+
+// Event listener for PeerJS connection open event
+peer.on('open', (id) => {
+  console.log('Peer ID:', id);
+});
+
+// Event listener for PeerJS error event
+peer.on('error', (error) => {
+  console.error('PeerJS Error:', error);
+});
+
 
     async function startStream() {
       try {
@@ -210,7 +224,8 @@
     document.getElementById('accept-call-btn').addEventListener('click', acceptCall);
     document.getElementById('end-call-btn').addEventListener('click', endCall);
   
-  
   </script>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  
 </body>
 </html>
