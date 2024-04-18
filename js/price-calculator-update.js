@@ -1,6 +1,6 @@
 let text = 'New Version $url'
 let link = 'https://google.com/'
-let update = true;
+let update = false;
 let txt;
 
 
