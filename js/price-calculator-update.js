@@ -5,7 +5,7 @@ let newVersion = 0.3;
 let updateArray = [];
 
 function appUpdate() {
-  updateArray.push(update)
+  updateArray.push(newVersion)
   updateArray.push(text)
   updateArray.push(link);
   console.log(updateArray)
