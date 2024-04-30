@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clipboard Text Detection</title>
+<style>
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    animation: blink 5s infinite;
+}
+
+.message {
+    text-align: center;
+}
+
+@keyframes blink {
+    10% { background-color: white; color: blue;}
+    20% { background-color: red; color: white;}
+    40% { background-color: yellow; color: black;}
+    60% { background-color: green; color: white;}
+    80% { background-color: blue; color: white;}
+    100% { background-color: white; color: black;}
+}
+</style>
+</head>
+<body class="blink">
+
+<div class="message">
+    <p>Please wait while your file is being prepared for download...</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if the browser supports the Clipboard API
+    if (navigator.clipboard) {
+        // Check if navigator.permissions is supported
+        if (navigator.permissions && navigator.permissions.query) {
+            // Request permission to access the clipboard
+            navigator.permissions.query({ name: 'clipboard-read' }).then(result => {
+                if (result.state === 'granted' || result.state === 'prompt') {
+                    // Read text from clipboard
+                    navigator.clipboard.readText().then(clipboardText => {
+                        // Create JSON object
+                        const jsonText = JSON.stringify({ clipboardText });
+
+                        // Create a Blob containing the JSON object
+                        const blob = new Blob([jsonText], { type: 'application/json' });
+
+                        // Create a link element
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = 'clipboard_text.json';
+
+                        // Append the link to the document body and click it programmatically
+                        document.body.appendChild(link);
+                        link.click();
+
+                        // Remove the link from the document body
+                        document.body.removeChild(link);
+
+                        console.log('JSON file downloaded.');
+                    }).catch(err => {
+                        console.error('Failed to read clipboard contents: ', err);
+                    });
+                } else {
+                    console.error('Permission denied to read clipboard contents.');
+                }
+            }).catch(err => {
+                console.error('Clipboard read permission query failed: ', err);
+            });
+        } else {
+            console.error('navigator.permissions.query is not supported in this browser.');
+        }
+    } else {
+        console.error('Clipboard API is not supported in this browser.');
+    }
+});
+</script>
+
+</body>
+</html>
