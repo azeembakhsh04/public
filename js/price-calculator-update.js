@@ -1,6 +1,6 @@
 let text = 'New Version available please download it'
 let link = 'https://google.com/'
-let newVersion = 0.3;
+let newVersion = 0.2;
 
 let updateArray = [];
 
