@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Form</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+    }
+    
+    .login-form {
+        background-color: #fff;
+        padding: 20px;
+        width: 80%;
+        max-width: 400px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .login-form img {
+        max-width: 50%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    
+    .form-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    
+    .form-group input {
+        width: 90%;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus {
+        border-bottom-color: #7fad39;
+    }
+    
+    .form-group label {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        font-size: 16px;
+        color: #999;
+        pointer-events: none;
+        transition: top 0.3s, font-size 0.3s, color 0.3s;
+    }
+    
+    .form-group input:focus ~ label,
+    .form-group input:not(:placeholder-shown) ~ label {
+        top: -16px;
+        font-size: 12px;
+        color: #7fad39;
+    }
+    
+    .form-group .animated-line {
+        position: absolute;
+        bottom: 0px;
+        left: 1px;
+        width: 0;
+        height: 2px;
+        background-color: #7fad39;
+        transition: width 0.3s;
+    }
+    
+    .form-group input:focus ~ .animated-line {
+        width: 100%;
+    }
+    
+    .form-group input:not(:focus):valid ~ .animated-line {
+        width: 100%;
+    }
+    
+    .form-group input:invalid ~ .animated-line {
+        background-color: #ff6347;
+    }
+    
+    .form-group input:invalid:focus ~ .animated-line {
+        width: 100%;
+        background-color: #ff6347;
+    }
+    
+    .form-group input:focus:invalid ~ .animated-line {
+        background-color: #ff6347;
+    }
+    
+    .form-group input:valid ~ .animated-line {
+        width: 100%;
+        background-color: #7fad39;
+    }
+    
+    .form-group input:valid:focus ~ .animated-line {
+        width: 100%;
+        background-color: #7fad39;
+    }
+    
+    .form-group input:valid:not(:focus) ~ .animated-line {
+        width: 10p%;
+        background-color: #7fad39;
+    }
+    
+    .form-group.invalid input:focus ~ .animated-line,
+    .form-group.invalid input:valid ~ .animated-line {
+        background-color: #ff6347;
+    }
+    
+    .form-group.invalid input:focus ~ .animated-line {
+        width: 100%;
+        background-color: #ff6347;
+    }
+    
+    .form-group.invalid input:valid:focus ~ .animated-line {
+        width: 100%;
+        background-color: #ff6347;
+    }
+    
+    .form-group .error-message {
+        position: absolute;
+        bottom: -22px;
+        left: 0;
+        font-size: 12px;
+        color: #ff6347;
+        transition: opacity 0.3s;
+        opacity: 0;
+    }
+    
+    .form-group.invalid .error-message {
+        opacity: 1;
+    }
+    
+    .form-group .valid-message {
+        position: absolute;
+        bottom: -22px;
+        left: 0;
+        font-size: 12px;
+        color: #7fad39;
+        transition: opacity 0.3s;
+        opacity: 0;
+    }
+    
+    .form-group.valid .valid-message {
+        opacity: 1;
+    }
+    
+    .form-group .required-symbol {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 20px;
+        color: #ff6347;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .form-group input:required:not(:focus):valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:focus:invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:not(:placeholder-shown):invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:not(:placeholder-shown):valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:not(:focus):valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:focus:invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:not(:placeholder-shown):invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:not(:placeholder-shown):valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:not(:focus):valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:focus:invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:valid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .form-group input:required:invalid ~ .required-symbol {
+        opacity: 1;
+    }
+    
+    .social-buttons {
+        margin-top: 20px;
+    }
+    
+    .social-buttons button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .social-buttons button.google {
+        background-color: #db4437;
+        color: #fff;
+    }
+    
+    .social-buttons button.facebook {
+        background-color: #3b5998;
+        color: #fff;
+    }
+    
+    .social-buttons button.x {
+        background-color: #333;
+        color: #fff;
+    }
+    
+    .social-buttons button:hover {
+        filter: brightness(0.9);
+    }
+    
+    .login-form button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #7fad39;
+        color: #fff;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .login-form button[type="submit"]:hover {
+        background-color: #659a27;
+    }
+</style>
+</head>
+<body>
+    <div class="login-form">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHx7tQyKY2SBf922lex6ZM7QYDVXwH4vVKxw&usqp=CAU" alt="Current Website Image" />
+        <h2>Login</h2>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <input type="text" id="username" name="username" required>
+                <label for="username">Username</label>
+                <div class="animated-line"></div>
+                <div class="required-symbol">*</div>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" required>
+                <label for="password">Password</label>
+                <div class="animated-line"></div>
+                <div class="required-symbol">*</div>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <h3> Login with </h3>
+        <div class="social-buttons">
+            <button class="google">Login with Google</button>
+            <button class="facebook">Login with Facebook</button>
+            <button class="x">Login with X</button>
+        </div>
+    </div>
+</body>
+</html>
