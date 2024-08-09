@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+        }
+        table, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        table td {
+            text-align: center;
+            transition: all 0.2s linear;
+            transition-behavior: smooth;
+        }
+        .crls {
+            height: 70px;
+            width: 60px;
+        }
+        td:hover {
+            position: relative;
+            padding: 0 10px;
+        }
+    </style>
+    <table>
+        <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>7</td>
+            <td>8</td>
+            <td>9</td>
+            <td>10</td>
+            <td>11</td>
+            <td>12</td>
+            <td>13</td>
+            <td>14</td>
+        </tr>
+        <tr>
+            <td bgcolor="#EE1C25" class="crls"> </td>
+            <td bgcolor="#F26724" class="crls"> </td>
+            <td bgcolor="#F8C611" class="crls"> </td>
+            <td bgcolor="#F5ED1C" class="crls"> </td>
+            <td bgcolor="#B5D333" class="crls"> </td>
+            <td bgcolor="#84C341" class="crls"> </td>
+            <td bgcolor="#4DB749" class="crls"> </td>
+            <td bgcolor="#34AA4C" class="crls"> </td>
+            <td bgcolor="#22B46B" class="crls"> </td>
+            <td bgcolor="#0BB9B7" class="crls"> </td>
+            <td bgcolor="#4690CD" class="crls"> </td>
+            <td bgcolor="#3853A4" class="crls"> </td>
+            <td bgcolor="#5A51A2" class="crls"> </td>
+            <td bgcolor="#63459D" class="crls"> </td>
+            <td bgcolor="#462C83" class="crls"> </td>
+        </tr>
+        <tr>
+            <td colspan="7"> Acidic </td>
+            <td> Neutral </td>
+            <td colspan="7"> Alkaline </td>
+        </tr>
+    </table>
+    <br>
+    <label for="randomStart"> Start Random Coloring </label>
+    <input type="checkbox" id="randomStart" value="true">
+
+    <script>
+        let crls = document.querySelectorAll('.crls');
+        let randomStart = document.getElementById('randomStart');
+        let bodyHeigth = document.getElementsByTagName('body').offsetHeight;
+        let bodyWidth = document.getElementsByTagName('body').offsetwidth;
+     
+        for(var i = 0; i < crls.length; i++) {
+            crls[i].addEventListener('click', function(){
+                //alert(crls[i].bgColor)
+                prompt('Currnt Hex Color', this.bgColor);
+            })
+        }
+
+        let interval;
+
+       randomStart.addEventListener('change', function(){
+        console.log(this.checked)
+        if(this.checked) {
+
+            let seconds = prompt('Enter seconds for animation', 1)
+            if(seconds.length == 0) {
+                randomStart.checked = false;
+                return;
+            }
+
+            while(Number(seconds) == 0) {
+                seconds = prompt('Please enter seconds'); 
+            }
+
+            interval = setInterval(function (){
+                for (var i = 0; i < crls.length; i++) {
+                    crls[i].style.position = "absolute";
+                    crls[i].style.top = Math.floor(Math.random() * 90) + 'vh';
+                    crls[i].style.left = Math.floor(Math.random() * 90) + 'vw';
+
+                    let randomDeg = Math.floor(Math.random() * 360);
+                   // crls[i].style.transform = `rotateY(${randomDeg}deg)`;
+                    crls[i].style.transition = `all ${seconds}s linear`;
+                    let random1 = Math.floor(Math.random() * 255)
+                    let random2 = Math.floor(Math.random() * 255)
+                    let random3 = Math.floor(Math.random() * 255)
+                    crls[i].style.backgroundColor = `rgb(${random1}, ${random2}, ${random3})`
+                }
+            }, seconds+"000")
+        } else {
+            clearInterval(interval);
+            return;
+        }
+       });
+
+    </script>
+</body>
+</html>
