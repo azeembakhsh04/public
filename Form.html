@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        fieldset {
+            text-align: center;
+        }
+        form {     
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+        }
+        form input, select, textarea {
+            width: 80vw;
+            margin: 5px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            padding: 5px;      
+            transition: all 0.2s linear;   
+        &:focus { 
+            padding: 10px;
+            width: 78vw;
+            }
+
+        }
+        form input:valid {
+            color: black;
+        }
+        form input:invalid {
+            color: red;
+        }
+        form textarea {
+            width: 80vw;
+            height: 100px;
+            margin: 5px;
+        }
+        .group {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items:  center;
+            width: 80vw;
+            text-align: left;
+            font-size: 12px;
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            & input[type=radio] {
+                width: 10px;
+            }
+        }
+
+        form button {
+            width: 20vw;
+            transition: all 0.5s linear;
+            background-color: rgb(0, 147, 225);
+            margin-top: 5px;
+            padding: 5px;
+            color: white;
+            border-radius: 5px;
+            border: 1px solid rgb(0, 147, 225);
+        }
+    </style>
+    <fieldset id="fieldset">
+        <legend > Registration Form </legend>
+        <form>
+            <input type="text" name="UserName" placeholder="Name *">
+            <input type="text" name="FatherName" placeholder="Father name *">
+            <div class="group">
+                <label for="StudentPhoto"> Your Photo </label>
+                <input type="file" name="StudentPhoto" accept="image/png" id="StudentPhoto">
+            </div>
+            <div class="group">
+                <label for="StudentCNIC"> Your CNIC or B-Form Photo </label>
+                <input type="file" name="StudentCNIC" accept="image/png" id="StudentCNIC" style="">
+            </div>
+            <div class="group">    
+                <label for="StudentFatherCNIC"> Your Father CNIC Photo </label>
+                <input type="file" name="StudentFatherCNIC" accept="image/png" id="StudentFatherCNIC">
+            </div>
+            <div class="group">
+                <input type="radio" name="Gender" id="gender" value="male">
+                <label for="gender"> Male </label>
+            </div>
+            <div class="group">
+                <input type="radio" name="Gender" id="gender" value="female">
+                <label for="gender"> Female </label>
+            </div>
+            <div class="group">
+                <select name="Trade" id="Trade">
+                    <option value="Web Development">Web development</option>
+                    <option value="Graphic Desgining">Graphic Desgining</option>
+                    <option value="CIT">CIT</option>
+                    <option value="Welding">Welding</option>
+                    <option value="Tailor">Tailor</option>
+                    <option value="AC Repairing">AC Repairing</option>
+                </select>
+            </div>
+            <textarea name="UserComment" id="" placeholder="Enter comment"></textarea>
+            <button type="submit" id="btn"> Submit </button>
+        </form>
+    </fieldset>
+    <script>
+        let fieldset = document.getElementById('fieldset');
+        let button = document.getElementById('btn');
+
+        let fieldsetHeight = fieldset.offsetHeight - button.offsetHeight;
+        let fieldsetWidth = fieldset.offsetWidth - button.offsetWidth;
+
+        button.addEventListener('mouseover', function() {
+            let top = Math.floor(Math.random() * fieldsetHeight);
+            let left = Math.floor(Math.random() * fieldsetWidth);
+            
+            button.style.position = 'absolute';
+            button.style.top = top + 'px';
+            button.style.left = left + 'px';
+        })
+    </script>
+</body>
+</html>
