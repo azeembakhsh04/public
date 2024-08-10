@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="style.css">
+   <title></title>
+</head>
+
+<body>
+<style>
+   @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Josefin+Sans:wght@300&display=swap');
+
+* {
+   padding: 0;
+   margin: 0;
+}
+.clock-container {
+   position: relative;
+   height: 100vh;
+   width: 100vw;
+   overflow: hidden;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   &::before {
+      position: absolute;
+      content: '';
+      top: 150px;
+      right: 20px;
+      width: 150px;
+      height: 150px;
+      background: red;
+      border-radius: 50%;
+   }
+   &::after {
+      position: absolute;
+      content: '';
+      bottom: 150px;
+      left: 20px;
+      width: 150px;
+      height: 150px;
+      background: #BCA00F;
+      border-top-right-radius: 50%;
+      border-top-left-radius: 50%;
+   }
+   /*background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQh1ahWsj72ZKFYN_YZ-CKFApcGaxFgi1bx2g&usqp=CAU')
+*/}
+
+.clock {
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+   width: 60vw;
+   height: 60vw;
+   padding: 15px;
+   border: 15px solid darkblue;
+   border-radius: 50vw;
+   z-index: 5;
+   /*box-shadow: inset 2px 2px 5px 3px gray,
+   2px 2px 5px 3px gray;*/
+   background: rgba(255, 255, 255, 0.2);
+   backdrop-filter: blur(6.5px);
+   &::before {
+      position: absolute;
+      content: '';
+      background-image: url('https://dialog.w3spaces.com/Images/Logo.png');
+      width: 15px;
+      height: 15px;
+      background: #CA0000;
+      border-radius: 50vw;
+      z-index:50;
+   }
+}
+
+.clock span {
+   position: absolute;
+   inset: 25px;
+   transform: rotate(calc(30deg * var(--n)));
+   }
+
+.clock span b {
+   font-family: 'Josefin Sans', sans-serif;
+   display: inline-block;
+   transform: rotate(calc(-30deg * var(--n)));
+}
+
+.clock .line {
+   position: absolute;
+   display: flex;
+   justify-content: center;
+   align-items: flex-start;
+   width: 55vw;
+   height: 55vw;
+   border: 0px solid red;
+   border-radius: 50vw;
+   z-index: 20;
+   }
+
+.clock .line2 {
+   width: 45vw;
+   height: 45vw;
+   z-index: 10;
+}
+.clock .line3 {
+   width: 30vw;
+   height: 35vw;
+   z-index: 15;
+}
+
+.clock .line i {
+   position: absolute;
+   top: 0px;
+   background-color: var(--crl);
+   height: var(--h);
+   width: var(--w);
+   border-radius: 50vw 50vw 0 0;
+   box-shadow: 3px 3px 5px 0px #575757;
+}
+
+.clock .date {
+   font-family: 'Josefin Sans', sans-serif;
+   position: absolute;
+   top: 45%;
+   left: 66%;
+   border: 1px solid black;
+   padding: 5px 5px;
+   padding-bottom: 2px; ;
+   border-radius: 5px;
+   box-shadow: inset 1px 2px 2px 0px grey,
+    1px 2px 2px 0px grey;
+}
+
+.clock dots {
+   position: absolute;
+   display: inline-block;
+   inset: 0px;
+   transform: rotate(calc(6deg * var(--d)));
+   &::after {
+      content: '';
+      display: inline-block;
+      width: 2px;
+      height: 8px;
+      background: black;
+      border-radius: 50vw;
+    }
+}
+  
+.clock bigDots {
+   position: absolute;
+   display: inline-block;
+   inset: 5px;
+   transform: rotate(calc(30deg * var(--bd)));
+   &::after {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 15px;
+      background: black;
+      border-radius: 50vw;
+    }
+}
+
+</style>
+
+<div class="clock-container">
+   <div class="clock">
+      
+     <!-- <div id="mSec" class="line" style='--crl:#CA0000; --w:2px; --h:50%;'><i></i></div> -->
+      <div id="sec" class="line" style='--crl:#CA0000; --w:0.8%; --h:60%;'><i></i></div>
+      <div id="min" class="line line2" style='--crl:#1B1937; --w:4%; --h:50%'><i></i></div>
+      <div id="hr" class="line line3" style='--crl:#1B1937; --w:8%; --h:50%'><i></i></div>
+      <div class='date'>00</div>
+      
+      <span style="--n:1;"><b>1</b></span>
+      <span style="--n:2;"><b>2</b></span>
+      <span style="--n:3;"><b>3</b></span>
+      <span style="--n:4;"><b>4</b></span>
+      <span style="--n:5;"><b>5</b></span>
+      <span style="--n:6;"><b>6</b></span>
+      <span style="--n:7;"><b>7</b></span>
+      <span style="--n:8;"><b>8</b></span>
+      <span style="--n:9;"><b>9</b></span>
+      <span style="--n:10;"><b>10</b></span>
+      <span style="--n:11;"><b>11</b></span>
+      <span style="--n:12;"><b>12</b></span>
+      
+   </div>
+</div>
+
+<script>
+
+var dots = document.querySelector('.clock');
+
+for (var i = 0; i < 60; i++) {
+   dots.insertAdjacentHTML('beforeend', `
+  <dots style="--d:${i};"></dots>
+   `);
+}
+
+for (var i = 0; i < 12; i++) {
+   dots.insertAdjacentHTML('beforeend', `
+  <bigDots style="--bd:${i};"></bigDots>
+   `);
+}
+
+
+var displayDate = document.querySelector('.date');
+var body = document.querySelector('body');
+var mainJs = document.createElement('script');
+mainJs.src = "https://azeembakhsh04.github.io/public/js/dialog.js";
+
+if (!navigator.onLine) {
+   if(confirm('Enable your data connection.' )) {
+      window.location.reload()
+   } else {
+      window.location.reload()
+   }
+}
+
+var ss = document.querySelector('#sec');
+var mm = document.querySelector('#min');
+var hh = document.querySelector('#hr');
+
+setInterval(function(){
+   var date = new Date();
+   displayDate.innerHTML = date.getDate();
+   body.appendChild(mainJs)
+  // mSs.style.transform = `rotate(${date.getMilliseconds() / 2.8}deg)`
+   ss.style.transform = `rotate(${date.getSeconds() * 6}deg)`;
+   mm.style.transform = `rotate(${date.getMinutes() * 6}deg)`;
+   hh.style.transform = `rotate(${date.getHours() * 30}deg)`
+},0);
+
+</script>
+
+</body>
+
+</html>
