@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Programming Tasks OTP Verification for joining Whatsapp Group.</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .profile {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .profile img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+    }
+
+    .profile h2 {
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-size: 24px;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      width: 280px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    input,
+    select {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 250px;
+    }
+
+    #phone {
+      width: 180px;
+    }
+
+    #countryCode {
+      width: 60px;
+      padding: 5px;
+    }
+
+    #resendSec {
+      width: 40px;
+      text-align: center;
+    }
+
+    #otp {
+      width: 180px;
+    }
+
+    #otpSection {
+      display: none;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #otpSection {
+      animation: slideIn 0.5s forwards;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .skills_container {
+      display: flex;
+      flex-wrap: flex;
+      gap: 5px 0px;
+      width: 90%;
+      overflow: scroll;
+      background: transparent;
+      padding: 10px;
+      scroll-behavior: smooth;
+      border-radius: 10px;
+      border: 1px solid lightgray;
+    }
+
+    .skills-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0 5px;
+      background: lightgray;
+      margin: 0 5px;
+      padding: 2px 10px;
+      border-radius: 5px;
+      border: 1px solid lightgray;
+    }
+
+    .skills_container .skills-group input {
+      background: #007bff;
+      width: auto;
+    }
+
+
+    .policy {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      width: 280px;
+      text-align: left;
+      background: ;
+    }
+
+    .policy input {
+      width: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <form class="container" id="verificationForm">
+    
+    <div class="profile">
+      <img src="/images/logo.png" alt="Group Image">
+      <h2>Programming Tasks</h2>
+    </div>
+    
+    <input type="text" name="UserName" id="userName" placeholder="Enter your name" required>
+    <div class="input-group">
+      <select name="CountryCode" id="countryCode" required>
+        <option value="+92">+92</option>
+        <option value="+91">+91</option>
+      </select>
+      <input type="number" name="UserPhoneNo" id="phone" placeholder="Phone No '30xxxxxxx'" required>
+    </div>
+    <div class="input-group" id="otpSection">
+      <input type="text" value="60" id="resendSec" readonly>
+      <input type="text" name="OTP" id="otp" placeholder="Enter OTP">
+    </div>
+    <h4 style="margin: 2px;"> Select Your Skills </h4>
+    <div class="skills_container" required></div>
+    <div class="policy">
+      <input type="checkbox" value="true" name="PrivacyPolicy" id="PrivacyPolicy" required>
+      <label for="PrivacyPolicy"> <a href="/privacy-policy.html">Privacy Policy</a></label>
+    </div>
+    <button type="submit" id="actionButton">Get OTP</button>
+  </form>
+
+  <div id="recaptcha-container"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDTO_vntpdWOPhyGg8pcPIlzfex-_lu238",
+      authDomain: "programing-tasks.firebaseapp.com",
+      databaseURL: "https://programing-tasks-default-rtdb.firebaseio.com",
+      projectId: "programing-tasks",
+      storageBucket: "programing-tasks.appspot.com",
+      messagingSenderId: "203296553404",
+      appId: "1:203296553404:web:2d0f70906b19d5cd2c13b9",
+      measurementId: "G-H0LGSPYH0P"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    let auth = firebase.auth();
+    let db = firebase.database();
+    let verificationForm = document.getElementById('verificationForm');
+    let skillsContainer = document.querySelector(".skills_container");
+    let otpSection = document.getElementById("otpSection");
+    let otpInput = document.getElementById('otp');
+    let button = document.getElementById('actionButton');
+    let isOtpSent = false;
+    let confirmationResult;
+    let mainUrl = "https://chat.whatsapp.com/HKQlptSnmPILRy5M1GnRIN";
+
+    let skills = ["HTML", "CSS", "JAVASCRIPT", "PHP", "PYTHON", "C", "C++", "JAVA"];
+
+    for (var i = 0; i < skills.length; i++) {
+      // console.log(skills[i])
+      skillsContainer.insertAdjacentHTML("beforeend", `
+      <div class="skills-group">
+       <input type="checkbox" value="true" name="${skills[i]}" id="${skills[i]}">
+       <label for="${skills[i]}">${skills[i]}</label>
+       </div>
+      `);
+    }
+
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+      'callback': function(response) {
+        onSignInSubmit();
+      },
+      'expired-callback': function() {
+        initRecaptcha();
+      }
+    });
+
+    function initRecaptcha() {
+      window.recaptchaVerifier.render().then(function(widgetId) {
+        window.recaptchaWidgetId = widgetId;
+      });
+    }
+
+    initRecaptcha();
+
+    let inputSecounds = document.getElementById("resendSec");
+    let inputValue = inputSecounds.value;
+
+    verificationForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      button.innerText = "Processing...";
+
+      let formData = new FormData(e.target);
+      let formObj = {};
+      let selectedSkills = [];
+      formData.forEach((value, key) => {
+        if (skills.indexOf(key) !== -1) {
+          selectedSkills.push(key);
+        } else {
+          formObj[key] = value;
+        }
+      });
+
+
+      formObj["UserPhoneNo"] = formObj.CountryCode + formObj.UserPhoneNo;
+      formObj["Skills"] = selectedSkills.join();
+      formObj["PrivacyPolicy"] = Boolean(formObj.PrivacyPolicy);
+      formObj["IsBan"] = false;
+      delete formObj.CountryCode;
+
+      let phoneNumber = formObj.UserPhoneNo;
+
+      const ref = db.ref('VerifiedUsers/' + phoneNumber);
+      ref.once('value')
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            let data = snapshot.val();
+            if (data.IsBan) {
+              button.innerText = "Failed (ban user found)"
+              alert("The user is banned you cannot join our community");
+              return;
+            } else {
+              if (mainUrl) {
+                window.open(mainUrl)
+              }
+            }
+          }
+
+          if (!isOtpSent) {
+            otpSection.style.display = 'block';
+            auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+              .then((result) => {
+                confirmationResult = result;
+                alert(`OTP sent to ${phoneNumber}`);
+                button.innerText = 'Submit OTP';
+                isOtpSent = true;
+
+                let interval = setInterval(function() {
+                  --inputValue
+                  if (inputValue < 1) {
+                    isOtpSent = false;
+                    button.innerHTML = "Resend OTP";
+                    inputValue = "60";
+                    clearInterval(interval);
+                  }
+                  inputSecounds.value = inputValue;
+                }, 1000);
+
+              })
+              .catch((error) => {
+                alert(`Error: ${error.message}`);
+                button.innerText = "Get OTP";
+              });
+          } else {
+            const otp = otpInput.value;
+            if (otp) {
+              confirmationResult.confirm(otp)
+                .then((result) => {
+                  alert('OTP verified successfully!');
+
+                  let user = result.user;
+
+                  // Save user data in the database after OTP verification
+                  db.ref('VerifiedUsers/' + user.phoneNumber).update(formObj)
+                    .then(() => {
+                      alert('User data saved successfully!');
+                      inputValue = 0;
+                      if (mainUrl) {
+                        window.open(mainUrl);
+                      }
+                      location.reload();
+
+                    })
+                    .catch((error) => {
+                      alert(`Error saving user data: ${error.message}`);
+                    });
+                })
+                .catch((error) => {
+                  alert(`Error verifying OTP: ${error.message}`);
+                });
+
+            } else {
+              alert('Please enter the OTP.');
+              button.innerText = 'Submit OTP';
+            }
+          }
+        }).catch((error) => {
+          console.error('Error getting data:', error);
+        });
+
+      /*
+          db.ref('VerifiedUsers').orderByChild("UserPhoneNo").equalTo(formObj.UserPhoneNo).once('value')
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                let data = snapshot.val();
+                console.log(data);
+                /*
+                data.forEach((val, key) => {
+                  console.log(val)
+                });
+                
+                alert('User with this phone number is already verified.');
+                if (mainUrl) {
+                  window.open(mainUrl);
+                }
+                //return;
+              }
+      */
+    });
+  </script>
+</body>
+
+</html>
