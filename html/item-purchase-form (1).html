@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- <meta charset="UTF-8"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Contact Form </title>
+</head>
+<body>
+  
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 50px auto;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #673ab7;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #673ab7;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #D5C7E2;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        margin-top: 5px;
+        font-size: 16px;
+        color: #673ab7;
+        box-sizing: border-box;
+        outline-color: #AF7CE1;
+        &::placeholder {
+          font-size: 12px;
+          font-style: italic;
+        }
+    }
+
+    .form-group select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23673ab7"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px top 50%;
+        background-size: 20px auto;
+        cursor: pointer;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        height: 100px;
+    }
+
+    .form-group .checkbox-label {
+        display: inline;
+        margin-top: 10px;
+        color: #673ab7;
+        font-size: 12px;
+    }
+
+    .form-group input[type="checkbox"] {
+        margin-right: 5px;
+        transform: translateY(2px);
+    }
+
+    .form-group input[type="submit"] {
+        background-color: #673ab7;
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-group input[type="submit"]:hover {
+        background-color: #5a2d99;
+    }
+</style>
+<div class="container">
+    <h2> Pubg Mobile UC TopUp Form</h2>
+    <form id="productForm">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" maxlength="30" placeholder="It will be auto fill" disabled>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="Email" maxlength="30" placeholder="It will be auto fill" disabled>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="PhoneNumber" maxlength="30" required>
+        </div>
+        <div class="form-group">
+            <label for="gameName">Game:</label>
+            <select id="gameName" name="GameName" required>
+                <option value="" selected disabled>Select a game</option>
+                <option value="Pubg Mobile"> Pubg Mobile </option>
+              <!--  <option value="Pubg Mobile Lite"> Pubg Mobile Lite </option>
+                <option value="Call of Duty">Call of Duty</option>
+                <option value="Free Fire">Free fire</option> -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="gamer-name">Gamer Name:</label>
+            <input type="text" id="gamer-name" name="GamerName" maxlength="30" required>
+        </div>
+        <div class="form-group">
+            <label for="gamer-id">Gamer ID:</label>
+            <input type="text" id="gamer-id" name="GamerID" maxlength="30" required>
+        </div>
+        
+        <div class="form-group" id="PubgUCList">
+            <label for="battle-coins">Battle Coins:</label>
+            <select id="battle-coins" name="BattleCoins" required>
+                <option value="" selected disabled>Select option</option>
+                <option value="60UC Rs.240"> 60UC Rs.240 </opton>
+                <option value="120UC Rs.380"> 120UC Rs.380 </option>
+                <option value="355UC Rs.1330 " > 355UC Rs.1330 </option>
+                <option value="363UC Rs.1400" > 363UC Rs.1400 </option>
+                <option value="720UC Rs.2500" > 720UC Rs.2500</option>
+                <option value="1950UC Rs.6000" > 1950UC Rs.6000</option>
+                <option value="4000UC Rs.11800" > 4000UC Rs.11800</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="checkbox" id="agreement" name="Agreement" required>
+            <label class="checkbox-label" for="agreement">I agree to the terms and conditions</label>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+
+<!--script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+  import { getDatabase, set, push, ref, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+  
+  let firebaseConfig = {
+    apiKey: "AIzaSyC8r7bnpz2HZ3itwcAFoGSq6MuXzgGXrsI",
+    authDomain: "azeem-tech.firebaseapp.com",
+    databaseURL: "https://azeem-tech-default-rtdb.firebaseio.com",
+    projectId: "azeem-tech",
+    storageBucket: "azeem-tech.appspot.com",
+    messagingSenderId: "362146826134",
+    appId: "1:362146826134:web:5003ae07ff2f0cef14ffb7",
+    measurementId: "G-VKP3KD919K"
+  };
+  
+  let app = initializeApp(firebaseConfig);
+  let db = getDatabase();
+  let auth = getAuth();
+  let provider = new GoogleAuthProvider();
+  let user = auth.currentUser;
+  let date = new Date();
+  let monthName = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+  let userStatus;
+  let uid;
+  let userProfile;
+  
+  let productForm = document.querySelector('#productForm');
+  let name = document.querySelector('#name');
+  let email = document.querySelector('#email');
+  
+  onAuthStateChanged(auth, (user) => {
+    userStatus = Boolean(user);
+    if (user) {
+      userProfile = user.photoURL;
+      name.value = user.displayName;
+      email.value = user.email;
+      uid = user.uid;
+    }
+  })
+  
+  productForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+   if(userStatus) {
+     if(confirm('Kindly check your provided details again as we are not responsible for the latter, after that we will contact you on your contact number.')) {
+  
+    let data = new FormData(e.target)
+    let formData = Object.fromEntries(data.entries());
+    var newObj = { UserID : uid,
+                   UserProfileURL: userProfile,
+                   Time: date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
+                   Date: date.getDate()+' '+monthName[date.getMonth()]+' '+date.getFullYear()};
+     
+     var mergedJSON = Object.assign(formData, newObj);
+    
+    e.target[8].value = "Uploading...";
+    
+      push(ref(db, 'DigitalCoins/' + e.target[3].value), mergedJSON)
+          .then(() => {
+              alert("Successfully submitted")
+                  location.reload();
+               })
+          .catch((error) => {
+              alert('Filed to submit: ' + error, false, 2000);
+          })
+       } // conformation condition ends here
+     } else {
+        if (confirm('Please first login')) {
+          signInWithPopup(auth, provider)
+            .then((result) => {
+              let user = result.user;
+              console.log(user);
+            }).catch((err) => {
+              let errorCode = err.code;
+              let errorMessage = err.message;
+            })
+        } // login condition ends here
+      } // user status enda here
+     });
+  /*
+   let selectedGame = document.querySelector('#gameName');
+   let battleCoins = document.querySelector('#battle-coins');
+   let allOptions = document.querySelectorAll('#battle-coins #AllOptions');
+   
+   selectedGame.addEventListener('change', function(e) {
+     console.log(e.target.selectedIndex)
+  function createOptions(optionData) {
+      let newOption = document.createElement('option');
+      battleCoins.appendChild(newOption)
+      newOption.value = optionData;
+      newOption.innerHTML = optionData;
+      newOption.id = 'AllOptions';
+   }
+  
+      if(e.target.selectedIndex == 1) {
+        //createOptions("308 + 55 Bonus 🎁 (363 UC 🪙 Rs. 1400)");
+      } else {
+        if(e.target.selectedIndex == 2) {
+          remove()
+        }
+      }
+   })
+   */
+</script-->
+</body>
+</html>
