@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub File Preview</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+            margin-bottom: 30px;
+        }
+        #search-bar {
+            display: block;
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #files-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .file-item:hover {
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .file-item a {
+            text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+        .file-size {
+            color: #888;
+            font-size: 0.85em;
+            margin-left: 15px;
+        }
+        .file-icon {
+            margin-right: 10px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+        }
+        .popup p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        .popup button {
+            padding: 10px 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .popup button:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .popup #previewBtn {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .popup #codeBtn {
+            display: none;
+            background-color: #28a745;
+            color: #fff;
+        }
+        .popup button:not(:last-child) {
+            margin-right: 10px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Files in Repository</h1>
+    <input type="text" id="search-bar" placeholder="Search files...">
+
+    <div id="files-container"></div>
+
+    <div id="overlay" class="overlay"></div>
+
+    <div id="popup" class="popup">
+        <p>Do you want to: </p>
+        <button id="previewBtn">Get Preview</button>
+        <button id="codeBtn">Get Code</button>
+    </div>
+
+    <script>
+        const repoOwner = "azeembakhsh04";
+        const repoName = "public";
+        const folderPath = "C-Projects/html";
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
+
+        const filesContainer = document.getElementById('files-container');
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('overlay');
+        const searchBar = document.getElementById('search-bar');
+        let filesData = [];
+        let selectedFileUrl = '';
+        let selectedFileName = '';
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(files => {
+                filesData = files;
+                displayFiles(files);
+            })
+            .catch(error => console.error('Error fetching files:', error));
+
+        function displayFiles(files) {
+            filesContainer.innerHTML = '';
+            files.forEach(file => {
+                if (file.type === "file") {
+                    const fileDiv = document.createElement('div');
+                    fileDiv.classList.add('file-item');
+
+                    const fileIcon = document.createElement('img');
+                    fileIcon.src = 'https://cdn-icons-png.flaticon.com/512/281/281760.png';
+                    fileIcon.alt = 'File Icon';
+                    fileIcon.width = 20;
+                    fileIcon.classList.add('file-icon');
+
+                    const fileLink = document.createElement('a');
+                    fileLink.href = "#";
+                    fileLink.textContent = file.name;
+                    fileLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        selectedFileUrl = `https://${repoOwner}.github.io/${repoName}/${folderPath}/${file.name}`;
+                        selectedFileName = file.name;
+                        showPopup();
+                    });
+
+                    const fileSize = document.createElement('span');
+                    fileSize.textContent = ` (${(file.size / 1024).toFixed(2)} KB)`;
+                    fileSize.classList.add('file-size');
+
+                    fileDiv.appendChild(fileIcon);
+                    fileDiv.appendChild(fileLink);
+                    fileDiv.appendChild(fileSize);
+
+                    filesContainer.appendChild(fileDiv);
+                }
+            });
+        }
+
+        searchBar.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredFiles = filesData.filter(file => file.name.toLowerCase().includes(searchTerm));
+            displayFiles(filteredFiles);
+        });
+
+        function showPopup() {
+            overlay.style.display = 'block';
+            popup.style.display = 'block';
+        }
+
+        function hidePopup() {
+            overlay.style.display = 'none';
+            popup.style.display = 'none';
+        }
+
+        overlay.addEventListener('click', hidePopup);
+
+        document.getElementById('previewBtn').addEventListener('click', () => {
+            hidePopup();
+            window.open(selectedFileUrl, '_blank');
+        });
+
+        document.getElementById('codeBtn').addEventListener('click', () => {
+            hidePopup();
+            window.open(`https://github.com/${repoOwner}/${repoName}/blob/main/${folderPath}/${selectedFileName}`, '_blank');
+        });
+    </script>
+
+</body>
+  </html>
