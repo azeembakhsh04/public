@@ -4,113 +4,181 @@ https://azeembakhsh04.github.io/public/html/Get%20Hub%20Pages%20Preview%20Link.h
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GitHub Pages Preview Generator</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .container {
-    width: 400px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-
-  input[type="text"] {
-    width: calc(100% - 20px); /* Adjusting width to accommodate button padding */
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-
-  label {
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  button {
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #45a049;
-  }
-
-  .preview {
-    margin-top: 20px;
-  }
-
-  .open-link {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #007bff;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-</style>
-</head>
-<body>
-<div class="container">
-  <h2>GitHub Pages Preview Generator</h2>
-  <input type="text" id="folderNameInput" value='C-Projects/html/' placeholder="Enter folder name" readonly>
-  <input type="text" id="fileNameInput" placeholder="Enter file name">
-  <label for="lowercaseCheckbox">
-  <input type="checkbox" id="lowercaseCheckbox"> Convert to lowercase
-</label>
-  <button id="generateButton">Generate Preview</button>
-  <div class="preview" id="preview"></div>
-  <div class="open-link" id="openLink"></div>
-</div>
-
-<script>
-  document.getElementById("generateButton").addEventListener("click", generatePreview);
-
-  function generatePreview() {
-    const folderName = document.getElementById("folderNameInput").value.trim();
-    const fileName = document.getElementById("fileNameInput").value.trim();
-    const lowercaseCheckbox = document.getElementById("lowercaseCheckbox");
-
-    if (folderName !== "" && fileName !== "") {
-      let transformedFolderName = folderName;
-      let transformedFileName = fileName;
-
-      if (lowercaseCheckbox.checked) {
-        transformedFolderName = folderName.toLowerCase();
-        transformedFileName = fileName.toLowerCase();
-      }
-
-      let encodedFileName = transformedFileName;
-      if (transformedFileName.includes(' ')) {
-        encodedFileName = encodeURIComponent(transformedFileName);
-      }
-
-      const previewURL = `https://azeembakhsh04.github.io/public/${transformedFolderName}/${encodedFileName}`;
-      document.getElementById("preview").innerHTML = `<a href="${previewURL}" target="_blank">Open Link</a>`;
-      document.getElementById("openLink").innerHTML = "";
-    } else {
-      document.getElementById("preview").innerHTML = "Please enter both folder name and file name!";
-      document.getElementById("openLink").innerHTML = "";
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Pages Preview Generator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-  }
-</script>
+
+    .container {
+      width: 300px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 20px);
+      /* Adjusting width to accommodate button padding */
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.2s linear;
+    }
+    
+    input[type="text"]:hover{
+      outline: 4px solid rgba(76, 175, 80, 0.3);
+    }
+
+    label {
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btns button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    .btns button:hover {
+      background-color: #45a049;
+    }
+
+    .link-container {
+      height: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 10px;
+      border: 1px solid lightgray;
+      padding: 10px;
+      transform: translateY(-30px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s linear
+    }
+    
+    .active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+      height: 30px;
+    }
+
+    .link-container #openLink {
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .link-container #copyLink {
+      font-size: 15px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+    }
+    
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>GitHub Pages Preview Generator</h2>
+    <input type="text" id="folderNameInput" value='C-Projects/html/' placeholder="Enter folder name" readonly>
+    <input type="text" id="fileNameInput" placeholder="Enter file name">
+    <label for="lowercaseCheckbox">
+      <input type="checkbox" id="redirectCheckbox"> Redirect
+    </label>
+    <div class="btns">
+      <a class="" href="https://github.com/azeembakhsh04/public/tree/main/C-Projects%2Fhtml">
+        <button id="visitRepository"> Visit Repository </button>
+      </a>
+      <button id="generateButton">Generate Preview</button>
+    </div>
+    <div class="link-container">
+      <a href="" target="_blank" id="openLink">Open Link</a>
+      <i class="bi bi-copy" id="copyLink"></i>
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("generateButton").addEventListener("click", generatePreview);
+
+    const folderName = document.getElementById("folderNameInput");
+    const fileName = document.getElementById("fileNameInput");
+    const redirectCheckbox = document.getElementById("redirectCheckbox");
+
+    const linkContainer = document.querySelector('.link-container');
+    const openLink = document.getElementById('openLink');
+    const copyLink = document.getElementById('copyLink');
+
+    fileName.addEventListener('input', function() {
+      linkContainer.classList.remove('active');
+    });
+
+    function generatePreview() {
+
+      if (folderName.value.trim() !== "" && fileName.value.trim() !== "") {
+        let transformedFolderName = folderName.value.trim();;
+        let transformedFileName = fileName.value.trim();;
+
+        let encodedFileName = transformedFileName;
+        if (transformedFileName.includes(' ')) {
+          encodedFileName = encodeURIComponent(transformedFileName);
+        }
+
+        const previewURL = `https://azeembakhsh04.github.io/public/${transformedFolderName}/${encodedFileName}`;
+       
+        copyLink.addEventListener('click', function() {
+          navigator.clipboard.writeText(previewURL).then(() => {
+            alert('Link Copied');
+          }).catch((e) => {
+            alert(e);
+          })
+        });
+
+        if (redirectCheckbox.checked) {
+          window.open(previewURL);
+          return;
+        }
+        linkContainer.classList.add('active');
+        openLink.href = previewURL;
+        //document.getElementById("openLink").innerHTML = "";
+      } else {
+        alert('Please enter both folder name and file name!');
+      }
+    }
+  </script>
 </body>
+
 </html>
