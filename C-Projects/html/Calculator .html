@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HTML</title>
+  
+  <!-- HTML -->
+  
+
+  <!-- Custom Styles -->
+  <style type="text/css">
+     body {
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+   overflow: scroll;
+}
+.calculator-body {
+   width: 100%;
+   height: 95vh;
+   background: #04011C;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   align-items: center;
+   padding-bottom: 5vh;
+}
+.calculator-body .display-result {
+   width: 90vw;
+   height: 8vh;
+   margin: 10px;
+   font-size: 10vh;
+   background: transparent;
+   color: white;
+   text-align: right;
+   border: none;
+   outline: none;
+}
+
+.display-result:nth-child(2) {
+   font-size: 2.5rem;
+}
+
+.calculator-body .buttons button {
+   display: flex-wrap;
+   flex-direction: row;
+   align-items: center;
+   width: 20vw;
+   height: 11vh;
+   background: transparent;
+   font-size: 5vh;
+   border: none;
+   margin: 5px;
+   transition: all 0.2s linear;
+}
+.calculator-body .calculator-buttons {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   
+}
+
+.calculator-body .buttons {
+   & button:nth-child(5),
+   button:nth-child(6),
+   button:nth-child(7),
+   button:nth-child(9),
+   button:nth-child(10),
+   button:nth-child(11),
+   button:nth-child(13),
+   button:nth-child(14),
+   button:nth-child(15),
+   button:nth-child(18){
+   color: white;
+   &:hover {
+      background: #41466D;
+      border-radius: 50%;
+   }
+  }
+  
+  & button:nth-child(1),
+   button:nth-child(2),
+   button:nth-child(3),
+   button:nth-child(4),
+   button:nth-child(8),
+   button:nth-child(12),
+   button:nth-child(16),
+   button:nth-child(17),
+   button:nth-child(19) {
+   color: #5971DC;
+   &:hover {
+      background: #30334F;
+      border-radius: 50%;
+   }
+  }
+  & button:nth-child(20) {
+     background: #5971DC;
+     color: white;
+     border-radius: 50vw;
+  }
+ }
+  </style>
+</head>
+
+<body>
+  <div class="calculator-body">
+     <div class="calculator-display">
+         <input type="text" placeholder="0" id="input-display" class="display-result" readonly>
+         <input type="text" placeholder="" id="display-result" class="display-result" readonly>
+     </div>
+     <div class="calculator-top-btns buttons">
+     </div>
+     <div class="calculator-buttons">
+        <div class="buttons-left-btns buttons">
+            <button onclick="clearAll()"> C </button>
+            <button onclick="clearOnce()"> «« </button>
+            <button onclick="addToDisplay('%')"> % </button>
+            <button onclick="addToDisplay('/')"> ÷ </button>
+            <button onclick="addToDisplay(1)"> 1 </button>
+            <button onclick="addToDisplay(2)"> 2 </button>
+            <button onclick="addToDisplay(3)"> 3 </button>
+            <button onclick="addToDisplay('*')"> ×</button>
+            <button onclick="addToDisplay(4)"> 4 </button>
+            <button onclick="addToDisplay(5)"> 5 </button>
+            <button onclick="addToDisplay(6)"> 6 </button>
+            <button onclick="addToDisplay('-')"> - </button>
+            <button onclick="addToDisplay(7)"> 7 </button>
+            <button onclick="addToDisplay(8)"> 8 </button>
+            <button onclick="addToDisplay(9)"> 9 </button>
+            <button onclick="addToDisplay('+')"> + </button>
+            <button onclick="addToDisplay('00')"> 00 </button>
+            <button onclick="addToDisplay(0)"> 0 </button>
+            <button onclick="addToDisplay('.')"> . </button>
+            <button onclick="result()"> = </button>
+            
+        </div>         
+     </div>
+     <div class="calculator-buttom-btns buttons">
+         
+     </div>
+ 
+ <script type="text/JavaScript">
+   let display = document.querySelector('#input-display')
+let resultDisplay = document.querySelector('#display-result')
+let getFix = document.querySelector('#getFix')
+
+function couser() {
+   display.setSelectionRange(display.value.length, display.value.length);
+   display.focus();
+}
+
+function addToDisplay(value) {
+   if(display.value.length <= 20 ) {
+   let value2 = display.value += value;
+   try {
+   if(display.value.includes("*") || 
+   display.value.includes("+") || 
+   display.value.includes("-") || 
+   display.value.includes("/")  || 
+   display.value.includes("%") ) {
+   // if(resultDisplay.value > 10000000000)
+     resultDisplay.value = eval(display.value);
+   //} else {
+      //resultDisplay.value = eval(display.value) / 10;
+//  }
+      } else {
+         resultDisplay.value = ''
+      }
+   } 
+   catch (err) {
+   }
+  } else {
+     alert("You can't type more then 15 numbers")
+  }
+  couser()
+}
+
+function clearOnce() {
+   display.value = display.value.
+   split('').reverse().join('').
+   substring(display.value.length, 1).
+   split('').reverse().join('');
+   
+   if (resultDisplay.value.length > 0 &&
+     display.value.includes("*") ||
+      display.value.includes("+") ||
+      display.value.includes("-") ||
+      display.value.includes("/") ||
+      display.value.includes("%") ) {
+         try {
+      resultDisplay.value = eval(display.value);
+         } catch (err) {
+            resultDisplay.value  = display.value.
+            split('').reverse().join('').
+            substring(display.value.length, 1).
+            split('').reverse().join('');
+         }
+   } else {
+      resultDisplay.value = '';
+   }
+   couser()
+}
+
+function clearAll() {
+   display.value = '';
+   resultDisplay.value = ''
+}
+
+
+function result() {
+   try {
+   if(display.value.length > 0) {
+   display.value = resultDisplay.value
+   resultDisplay.value = ''
+   }
+   } catch (err) {
+      alert('Failed, ' + err)
+   }
+   couser()
+}
+
+/*================== leave this section =============================*/
+
+    if(!navigator.onLine) {
+       setTimeout(function() {
+         alert('If you want to reach developer then enable your data connection and relaunch this project')
+       },2000)
+      }
+  </script>
+  
+ <script src='https://azeembakhsh04.github.io/public/js/dialog.js'></script>
+   
+</body>
+</html>
