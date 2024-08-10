@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+</head>
+<style type="text/css">
+   body {
+   margin: 0;
+   padding: 0;
+}
+
+.clock-container {
+   position: relative;
+   height: 100vh;
+   width: 100vw;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background: #131531;
+}
+.clock-container .clock {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   background: #131531;
+   border-top-left-radius: 50vw;
+   border-top-right-radius: 50vw;
+   box-shadow: 4px 7px 20px #383A5F, inset 5px 10px 5px #383A5F;
+   padding: 30px;
+   padding-bottom: 30px;
+}
+.clock-container .analog-clock {
+   position: relative;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 40vh;
+   width: 40vh;
+   background: #131531;
+   box-shadow: 1px 2px 3px #333557,
+   inset 1px 2px 3px #333557;
+   border-radius: 50%;
+}
+.analog-clock::before {
+   content: '';
+   width: 40px;
+   height: 40px;
+   background: white;
+   border-radius: 50%;
+   z-index: 20;
+   box-shadow: 0 0 10px white;
+}
+.analog-clock::after {
+   position: absolute;
+   bottom: 30%;
+   content: 'Azeem Bakhsh';
+   color: #131531;
+   text-shadow: 0px 0px 5px #4D5394;
+   text-transform: uppercase;
+   z-index: 0;
+}
+.analog-clock span {
+   position: absolute;
+   inset: 10px;
+   text-align: center;
+   transform: rotate(calc(30deg * var(--i)));
+}
+
+.analog-clock span b {
+   display: inline-block;
+   color: white;
+   font-size: 50px;
+   opacity: 0.5;
+   text-shadow: 0 0 10px white;
+   transform: rotate(calc(-30deg * var(--i)))
+}
+
+.analog-clock .line {
+   position: absolute;
+   height: 17vh;
+   width: 17vh;
+   border: 1px solid #333557;
+   border-radius: 50%;
+   display: flex;
+   justify-content: center;
+   align-items: flex-start;
+   z-index: 5;
+ 
+   &::before {
+     content: '';
+     width: 20px;
+     height: 20px;
+     border-radius: 50%;
+     margin: -5px;
+     background: var(--clr);
+     box-shadow: 0 0 20px 5px var(--clr);
+  }
+}
+
+.analog-clock .line2 {
+   width: 22vh;
+   height: 22vh;
+   z-index: 8;
+}
+.analog-clock .line3 {
+   width: 27vh;
+   height: 27vh;
+   margin: 0px;
+   z-index: 10;
+}
+
+.analog-clock .line i {
+   position: absolute;
+   top: 0px;
+   background: var(--clr); 
+   height: 50%;
+   width: 7px;
+   transform: scaleY(0.6);
+   transform-origin: bottom;
+}
+
+.clock-container .clock .digital-clock {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   margin-top: 50px;
+   width: auto;
+   height: auto;
+   padding: 20px 30px;
+   border-radius: 50vw;
+   background: #141631;
+   box-shadow: 1px 2px 3px #383C6D, inset 1px 2px 3px #383C6D;
+}
+.clock .digital-clock span {
+   align-items: center;
+   font-size: 75px;
+   
+   &:nth-child(2)::before {
+      content: ':';
+      color: white;
+      margin: 0 10px;
+   }
+   &:nth-child(3)::before {
+      content: ':';
+      color: white;
+      opacity: 0;
+      margin: 0 10px;
+      animation-name: blink;
+      animation-iteration-count: infinite;
+      animation-duration: 1s;
+   }
+   & #amPm {
+      margin-left: 10px;
+      font-size: 25px;
+   }
+}
+
+.clock .digital-clock span b {
+   color: var(--crl);
+   font-size: 70px;
+   font-weight: bold;
+}
+
+
+@keyframes blink {
+   from {opacity: 1.0;}
+   to {opacity: 0;}
+}
+
+@media (max-width: 720px) {
+  .clock-container .clock {
+   box-shadow: 2px 5px 10px #383A5F, inset 2px 5px 5px #383A5F;
+   padding: 10px;
+   padding-bottom: 10px;
+  }
+  .analog-clock::before {
+     width: 10px;
+     height: 10px;
+    }
+  .analog-clock span b {
+     font-size: 20px;
+  }
+  .analog-clock .line i {
+     
+  }
+   .analog-clock .line {
+      &::before {
+         width: 10px;
+         height: 10px;
+         box-shadow: 0 0 10px 2px var(--clr);
+        
+      } 
+      & i {
+         width: 2px;
+         height: 50%;
+      }
+   }
+   
+   .clock-container .clock .digital-clock {
+      padding: 10px 20px;
+      margin: 20px 0;
+   }
+   .clock-container .clock .digital-clock span {
+      &:nth-child(2)::before {
+         margin: 0 5px;
+      }
+     &:nth-child(3)::before {
+        margin: 0 5px;
+     }
+     & #amPm {
+        font-size: 10px;
+        margin-left: 5px;
+     }
+   }
+   
+   .clock .digital-clock span {
+      font-size: 25px;
+   }
+   .clock .digital-clock span b {
+       font-size: 20px;
+    }
+    
+}
+</style>
+<body>
+   <div class="clock-container">
+    <div class="clock">
+      <div class="analog-clock">
+         <div class="line" style="--clr:#FF0606;" id="hh"><i></i></div> 
+         <div class="line line2" style="--clr:#069EFF;" id="mm"><i></i></div>
+         <div class="line line3" style="--clr:#06FF53;" id="ss"><i></i></div>
+         
+         <span style="--i:1;"><b>1</b></span>
+         <span style="--i:2;"><b>2</b></span>
+         <span style="--i:3;"><b>3</b></span>
+         <span style="--i:4;"><b>4</b></span>
+         <span style="--i:5;"><b>5</b></span>
+         <span style="--i:6;"><b>6</b></span>
+         <span style="--i:7;"><b>7</b></span>
+         <span style="--i:8;"><b>8</b></span>
+         <span style="--i:9;"><b>9</b></span>
+         <span style="--i:10;"><b>10</b></span>
+         <span style="--i:11;"><b>11</b></span>
+         <span style="--i:12;"><b>12</b></span>
+      </div>
+      <div class="digital-clock">
+         <span style="--crl:#FF0606;"><b id="d-hh">00</b></span>
+         <span style="--crl:#069EFF;"><b id="d-mm">00</b></span>
+         <span style="--crl:#06FF53;"><b id="d-ss">00</b></span>
+         <span style="--crl:white;"><b id="amPm">AMP</b></span>
+         
+      </div>
+     </div>
+   </div>
+   
+   <script>
+var body = document.querySelector('body');
+var mainJs = document.createElement('script');
+mainJs.src = "https://azeembakhsh04.github.io/public/js/dialog.js";
+
+var hh = document.getElementById('hh')
+var mm = document.getElementById('mm');
+var ss = document.getElementById('ss');
+
+var dhh = document.getElementById('d-hh');
+var dmm = document.getElementById('d-mm');
+var dss = document.getElementById('d-ss');
+var ampm = document.getElementById('amPm');
+ 
+ setInterval(function () {
+    var date = new Date();
+ 
+    hh.style.transform = `rotateZ(${date.getHours() * 30}deg)`
+    mm.style.transform = `rotateZ(${date.getMinutes() * 6}deg)`
+    ss.style.transform = `rotateZ(${date.getSeconds() * 6}deg)`
+    
+    function addZiro(_value) {
+       if(_value < 10) {
+          return '0' + _value
+       } else {
+          return _value;
+       }
+    }
+    
+   
+    if (date.getHours() > 12 ) {
+    dhh.innerHTML = addZiro(date.getHours() -12);
+    body.appendChild(mainJs);
+    ampm.innerHTML = 'PM';
+    } else {
+    dhh.innerHTML = addZiro(date.getHours());
+    ampm.innerHTML = 'PM';
+    }
+    
+    
+    dmm.innerHTML = addZiro(date.getMinutes());
+    dss.innerHTML = addZiro(date.getSeconds());
+ })
+
+   </script>
+   
+</body>
+
+</html>
