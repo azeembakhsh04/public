@@ -190,8 +190,11 @@ var body = document.querySelector('body');
         console.log('Responce status true')
         var close = document.querySelector('.close-btn');
         var dialog = document.querySelector('.dialog_container');
+       document.body.style.overflow = 'hidden';
         
         close.addEventListener('click', function(){
+           document.body.style.overflow = 'scroll';
+        
            dialog.style.display = 'none';
         });
        
