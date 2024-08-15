@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 20px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .regex {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #e8e8e8;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .example {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-left: 5px solid #00796b;
+            margin: 10px 0;
+        }
+
+        .example-code {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #eceff1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            width: 100%;
+            overflow: scroll;
+        }
+        code {
+          padding: 0;
+          margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Regular Expressions (Regex) Guide</h1>
+
+    <h2>1. Literal Characters</h2>
+    <p><strong>What It Is:</strong> The exact characters you type.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">cat</span> matches the word "cat" in the text.</p>
+
+    <h2>2. Dot (<span class="regex">.</span>)</h2>
+    <p><strong>What It Does:</strong> Matches any single character except a newline.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">c.t</span> matches "cat", "cut", "c2t".</p>
+
+    <h2>3. Asterisk (<span class="regex">*</span>)</h2>
+    <p><strong>What It Does:</strong> Matches 0 or more of the preceding character.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">a*</span> matches "", "a", "aaa".</p>
+
+    <h2>4. Plus (<span class="regex">+</span>)</h2>
+    <p><strong>What It Does:</strong> Matches 1 or more of the preceding character.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">a+</span> matches "a", "aa", "aaa".</p>
+
+    <h2>5. Question Mark (<span class="regex">?</span>)</h2>
+    <p><strong>What It Does:</strong> Matches 0 or 1 of the preceding character (makes it optional).</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">colou?r</span> matches "color" or "colour".</p>
+
+    <h2>6. Square Brackets (<span class="regex">[ ]</span>)</h2>
+    <p><strong>What It Does:</strong> Matches any one character inside the brackets.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">[abc]</span> matches "a", "b", or "c".</p>
+
+    <h2>7. Dash Inside Brackets (<span class="regex">-</span>)</h2>
+    <p><strong>What It Does:</strong> Specifies a range of characters inside brackets.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">[0-9]</span> matches any digit from 0 to 9; <span class="regex">[a-z]</span> matches any lowercase letter.</p>
+
+    <h2>8. Caret (<span class="regex">^</span>)</h2>
+    <p><strong>What It Does:</strong> Matches the start of a string.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">^Hello</span> matches "Hello" only if it's at the start of the string.</p>
+
+    <h2>9. Dollar Sign (<span class="regex">$</span>)</h2>
+    <p><strong>What It Does:</strong> Matches the end of a string.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">world!$</span> matches "world!" only if it's at the end of the string.</p>
+
+    <h2>10. Parentheses (<span class="regex">( )</span>)</h2>
+    <p><strong>What It Does:</strong> Groups characters or patterns together and remembers them.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">(abc)+</span> matches "abc", "abcabc" (one or more occurrences of "abc").</p>
+
+    <h2>11. Pipe (<span class="regex">|</span>)</h2>
+    <p><strong>What It Does:</strong> Means "or" between patterns.</p>
+    <p class="example"><strong>Example:</strong> <span class="regex">a|b</span> matches "a" or "b".</p>
+
+    <h2>12. Curly Braces (<span class="regex">{ }</span>)</h2>
+    <p><strong>What It Does:</strong> Specifies how many times the preceding character or group should appear.</p>
+    <p class="example">
+        <strong>Examples:</strong>
+        <br><span class="regex">{n}</span>: Exactly <em>n</em> times. Example: <span class="regex">a{3}</span> matches "aaa".
+        <br><span class="regex">{n,}</span>: At least <em>n</em> times. Example: <span class="regex">a{2,}</span> matches "aa", "aaa", "aaaa".
+        <br><span class="regex">{n,m}</span>: Between <em>n</em> and <em>m</em> times. Example: <span class="regex">a{2,4}</span> matches "aa", "aaa", "aaaa".
+    </p>
+
+    <h2>13. Backslash (<span class="regex">\</span>)</h2>
+    <p><strong>What It Does:</strong> Escapes special characters or indicates special sequences.</p>
+    <p class="example">
+        <strong>Examples:</strong>
+        <br><span class="regex">\.</span> matches a literal dot, not any character.
+        <br><span class="regex">\d</span> matches any digit (0-9).
+        <br><span class="regex">\w</span> matches any word character (letters, digits, and underscores).
+        <br><span class="regex">\s</span> matches any whitespace (spaces, tabs, etc.).
+    </p>
+
+    <h2>Quick Reference Summary</h2>
+    <p>
+        <strong>Regex Symbols and Uses:</strong>
+        <br><span class="regex">.</span>: Any single character except a newline.
+        <br><span class="regex">*</span>: 0 or more of the preceding element.
+        <br><span class="regex">+</span>: 1 or more of the preceding element.
+        <br><span class="regex">?</span>: 0 or 1 of the preceding element (optional).
+        <br><span class="regex">[abc]</span>: Any one of the characters <em>a</em>, <em>b</em>, or <em>c</em>.
+        <br><span class="regex">[0-9]</span>: Any digit from 0 to 9.
+        <br><span class="regex">^</span>: Start of a string.
+        <br><span class="regex">$</span>: End of a string.
+        <br><span class="regex">(abc)</span>: Grouping; matches the exact sequence "abc".
+        <br><span class="regex">a|b</span>: Matches "a" or "b".
+        <br><span class="regex">{2,4}</span>: Matches between 2 and 4 of the preceding element.
+        <br><span class="regex">\d</span>: Matches any digit.
+        <br><span class="regex">\w</span>: Matches any word character.
+        <br><span class="regex">\s</span>: Matches any whitespace character.
+    </p>
+
+    <h2>Simple Use Case Example</h2>
+    <p>Example: Suppose you want to find a phone number in a text that looks like this: "123-456-7890".</p>
+    <pre class="example-code">
+        <code>
+            let text = "Call me at 123-456-7890.";
+            let regex = /\d{3}-\d{3}-\d{4}/;
+            console.log(text.match(regex));  // Output: ["123-456-7890"]
+        </code>
+    </pre>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><span class="regex">\d{3}</span>: Matches three digits.</li>
+        <li><span class="regex">-</span>: Matches the literal dash.</li>
+        <li><span class="regex">\d{4}</span>: Matches four digits.</li>
+    </ul>
+    <p>This matches the pattern "123-456-7890" exactly.</p>
+
+</body>
+</html>
