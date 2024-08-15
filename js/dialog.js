@@ -19,6 +19,8 @@ var body = document.querySelector('body');
    .dialog_container {
       font-family: 'Itim', cursive;
       position: fixed;
+      left: 0;
+      top: 0;
       height: 100vh;
       width: 100vw;
       display: flex;
