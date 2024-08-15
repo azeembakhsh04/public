@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Queries with PHP Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 20px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .span-code {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #e8e8e8;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .example {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-left: 5px solid #00796b;
+            margin: 10px 0;
+        }
+
+        .example-code {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #eceff1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            width: 100%;
+            overflow: scroll;
+        }
+        code {
+          padding: 0;
+          margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>MySQL Queries with PHP Examples</h1>
+
+    <h2>1. Connecting to a MySQL Database</h2>
+    <p>To connect to a MySQL database using PHP, you can use <span class="span-code">MySQLi</span> or <span class="span-code">PDO</span>. Here are examples:</p>
+
+    <div class="example">
+        <strong>MySQLi (Procedural):</strong>
+        <pre class="example-code"><code>&lt;?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "your_database";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+echo "Connected successfully";
+?&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <strong>PDO:</strong>
+        <pre class="example-code"><code>&lt;?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "your_database";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connected successfully";
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?&gt;</code></pre>
+    </div>
+
+    <h2>2. Selecting Data from a Table</h2>
+    <p>To retrieve data from a MySQL table:</p>
+
+    <div class="example">
+        <strong>MySQLi (Procedural):</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "SELECT id, name, salary FROM employees";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+        echo "ID: " . $row["id"]. " - Name: " . $row["name"]. " - Salary: " . $row["salary"]. "&lt;br&gt;";
+    }
+} else {
+    echo "0 results";
+}
+?&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <strong>PDO:</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "SELECT id, name, salary FROM employees";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach($result as $row) {
+    echo "ID: " . $row["id"]. " - Name: " . $row["name"]. " - Salary: " . $row["salary"]. "&lt;br&gt;";
+}
+?&gt;</code></pre>
+    </div>
+
+    <h2>3. Inserting Data into a Table</h2>
+    <p>To add new data to a MySQL table:</p>
+
+    <div class="example">
+        <strong>MySQLi (Procedural):</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "INSERT INTO employees (name, salary) VALUES ('John Doe', 50000)";
+
+if (mysqli_query($conn, $sql)) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "&lt;br&gt;" . mysqli_error($conn);
+}
+?&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <strong>PDO:</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "INSERT INTO employees (name, salary) VALUES ('John Doe', 50000)";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+
+echo "New record created successfully";
+?&gt;</code></pre>
+    </div>
+
+    <h2>4. Updating Data in a Table</h2>
+    <p>To update existing data in a MySQL table:</p>
+
+    <div class="example">
+        <strong>MySQLi (Procedural):</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "UPDATE employees SET salary = 60000 WHERE id = 1";
+
+if (mysqli_query($conn, $sql)) {
+    echo "Record updated successfully";
+} else {
+    echo "Error updating record: " . mysqli_error($conn);
+}
+?&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <strong>PDO:</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "UPDATE employees SET salary = 60000 WHERE id = 1";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+
+echo "Record updated successfully";
+?&gt;</code></pre>
+    </div>
+
+    <h2>5. Deleting Data from a Table</h2>
+    <p>To delete data from a MySQL table:</p>
+
+    <div class="example">
+        <strong>MySQLi (Procedural):</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "DELETE FROM employees WHERE id = 1";
+
+if (mysqli_query($conn, $sql)) {
+    echo "Record deleted successfully";
+} else {
+    echo "Error deleting record: " . mysqli_error($conn);
+}
+?&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <strong>PDO:</strong>
+        <pre class="example-code"><code>&lt;?php
+$sql = "DELETE FROM employees WHERE id = 1";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+
+echo "Record deleted successfully";
+?&gt;</code></pre>
+    </div>
+
+    <h2>6. Prepared Statements</h2>
+    <p>Prepared statements help in safely executing SQL queries with user inputs.</p>
+
+    <div class="example">
+        <strong>MySQLi (Procedural):</strong>
+        <pre class="example-code"><code>&lt;?php
+$stmt = $conn->prepare("INSERT INTO employees (name, salary) VALUES (?, ?)");
+$stmt->bind_param("si", $name, $salary);
+
+$name = "Jane Doe";
+$salary = 55000;
+$stmt->execute();
+
+echo "New records created successfully";
+?&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <strong>PDO:</strong>
+        <pre class="example-code"><code>&lt;?php
+$stmt = $conn->prepare("INSERT INTO employees (name, salary) VALUES (:name, :salary)");
+$stmt->bindParam(':name', $name);
+$stmt->bindParam(':salary', $salary);
+
+$name = "Jane Doe";
+$salary = 55000;
+$stmt->execute();
+
+echo "New records created successfully";
+?&gt;</code></pre>
+    </div>
+
+    <h2>7. Closing the Connection</h2>
+    <p>Always close the database connection after your operations are complete:</p>
+
+    <div class="example">
+        <strong>MySQLi (Procedural):</strong>
+        <pre class="example-code"><code>&lt;?php
+mysqli_close($conn);
+?&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <strong>PDO:</strong>
+        <pre class="example-code"><code>&lt;?php
+$conn = null;
+?&gt;</code></pre>
+    </div>
+    
+    <script src='https://azeembakhsh04.github.io/public/js/dialog.js'></script>
+
+</body>
+</html>
