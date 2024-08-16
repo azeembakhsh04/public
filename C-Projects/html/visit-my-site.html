@@ -1,16 +1,73 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Visit Azeem Tech Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+        }
+
+        .container {
+            width: 70%;
+            text-align: center;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #333;
+        }
+
+        p {
+            margin: 10px 0 30px;
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #66a6ff;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            text-decoration: none;
+            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            background: #89f7fe;
+            transform: scale(1.1);
+        }
+
+        .btn i {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h2> My Personal Site</h2>
-    <a href="https://azeemtech.000.pe/" target="_blank" rel="noopener noreferrer"> Website link </a>
-<br>
- <h2> My Personal Site</h2>
-    <a href="https://azeembakhsh04.github.io/public/html/Get%20Hub%20Pages%20Preview%20Link.html" target="_blank" rel="noopener noreferrer"> Visit This page  </a>
-
+    <div class="container">
+        <h1>Welcome to Azeem Tech Store</h1>
+        <p>Click the button below to visit our website</p>
+        <a href="https://azeemtech.000.pe/" class="btn">
+            <i class="fas fa-arrow-right"></i> Visit Website
+        </a>
+    </div>
 </body>
 </html>
