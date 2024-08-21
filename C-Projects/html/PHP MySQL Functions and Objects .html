@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP MySQL Functions and Objects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 20px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .regex {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #e8e8e8;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .example {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-left: 5px solid #00796b;
+            margin: 10px 0;
+        }
+
+        .example-code {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #eceff1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            width: 100%;
+            overflow: scroll;
+        }
+
+        code {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>PHP MySQL Functions and Objects</h1>
+
+    <h2>mysqli Class</h2>
+    <p>The <code class="regex">mysqli</code> class is the main object used to interact with a MySQL database in PHP. It represents a connection to the MySQL server.</p>
+
+    <div class="example">
+        <h3>Example of Creating a Connection</h3>
+        <pre class="example-code"><code>$con = new mysqli("host", "username", "password", "database");</code></pre>
+        <p>
+            - <code class="regex">host</code>: The hostname of the MySQL server (e.g., "localhost").<br>
+            - <code class="regex">username</code>: The MySQL username.<br>
+            - <code class="regex">password</code>: The MySQL password.<br>
+            - <code class="regex">database</code>: The name of the database to connect to.
+        </p>
+    </div>
+
+    <h2>Commonly Used Methods</h2>
+    <h3>connect_error</h3>
+    <p>The <code class="regex">connect_error</code> property holds any connection error message.</p>
+    <div class="example">
+        <h3>Example of Checking for a Connection Error</h3>
+        <pre class="example-code"><code>if ($con->connect_error) {
+    die("Connection failed: " . $con->connect_error);
+}</code></pre>
+    </div>
+
+    <h3>close()</h3>
+    <p>The <code class="regex">close()</code> method closes the connection to the MySQL server.</p>
+    <div class="example">
+        <h3>Example of Closing a Connection</h3>
+        <pre class="example-code"><code>$con->close();</code></pre>
+    </div>
+
+    <h3>query($query)</h3>
+    <p>The <code class="regex">query($query)</code> method executes a SQL query against the database.</p>
+    <div class="example">
+        <h3>Example of Running a Query</h3>
+        <pre class="example-code"><code>$result = $con->query("SELECT * FROM users");</code></pre>
+    </div>
+
+    <h3>prepare($query)</h3>
+    <p>The <code class="regex">prepare($query)</code> method prepares a SQL statement for execution.</p>
+    <div class="example">
+        <h3>Example of Preparing a SQL Statement</h3>
+        <pre class="example-code"><code>$stmt = $con->prepare("INSERT INTO users (name, email) VALUES (?, ?)");</code></pre>
+    </div>
+
+    <h3>real_escape_string($string)</h3>
+    <p>The <code class="regex">real_escape_string($string)</code> method escapes special characters in a string for use in a SQL query.</p>
+    <div class="example">
+        <h3>Example of Escaping a String</h3>
+        <pre class="example-code"><code>$safe_string = $con->real_escape_string($unsafe_string);</code></pre>
+    </div>
+
+    <h3>error</h3>
+    <p>The <code class="regex">error</code> property holds the last error message from the MySQL server.</p>
+    <div class="example">
+        <h3>Example of Displaying an Error Message</h3>
+        <pre class="example-code"><code>echo $con->error;</code></pre>
+    </div>
+
+    <h2>mysqli_result Class</h2>
+    <p>The <code class="regex">mysqli_result</code> class represents the result set obtained from a SELECT query.</p>
+
+    <h3>fetch_assoc()</h3>
+    <p>The <code class="regex">fetch_assoc()</code> method fetches a result row as an associative array.</p>
+    <div class="example">
+        <h3>Example of Fetching a Row</h3>
+        <pre class="example-code"><code>$row = $result->fetch_assoc();</code></pre>
+    </div>
+
+    <h3>fetch_array()</h3>
+    <p>The <code class="regex">fetch_array()</code> method fetches a result row as an associative array, a numeric array, or both.</p>
+    <div class="example">
+        <h3>Example of Fetching a Row</h3>
+        <pre class="example-code"><code>$row = $result->fetch_array();</code></pre>
+    </div>
+
+    <h3>fetch_row()</h3>
+    <p>The <code class="regex">fetch_row()</code> method fetches a result row as a numeric array.</p>
+    <div class="example">
+        <h3>Example of Fetching a Row</h3>
+        <pre class="example-code"><code>$row = $result->fetch_row();</code></pre>
+    </div>
+
+    <h3>num_rows</h3>
+    <p>The <code class="regex">num_rows</code> property returns the number of rows in the result set.</p>
+    <div class="example">
+        <h3>Example of Counting Rows</h3>
+        <pre class="example-code"><code>echo $result->num_rows;</code></pre>
+    </div>
+
+    <h3>free()</h3>
+    <p>The <code class="regex">free()</code> method frees the memory associated with the result.</p>
+    <div class="example">
+        <h3>Example of Freeing a Result</h3>
+        <pre class="example-code"><code>$result->free();</code></pre>
+    </div>
+
+    <h2>mysqli_stmt Class</h2>
+    <p>The <code class="regex">mysqli_stmt</code> class represents a prepared statement.</p>
+
+    <h3>bind_param($types, ...$vars)</h3>
+    <p>The <code class="regex">bind_param($types, ...$vars)</code> method binds variables to a prepared statement as parameters.</p>
+    <div class="example">
+        <h3>Example of Binding Parameters</h3>
+        <pre class="example-code"><code>$stmt->bind_param("ss", $name, $email);</code></pre>
+    </div>
+
+    <h3>execute()</h3>
+    <p>The <code class="regex">execute()</code> method executes a prepared statement.</p>
+    <div class="example">
+        <h3>Example of Executing a Statement</h3>
+        <pre class="example-code"><code>$stmt->execute();</code></pre>
+    </div>
+
+    <h3>bind_result(...$vars)</h3>
+    <p>The <code class="regex">bind_result(...$vars)</code> method binds variables to a prepared statement for result storage.</p>
+    <div class="example">
+        <h3>Example of Binding Results</h3>
+        <pre class="example-code"><code>$stmt->bind_result($name, $email);</code></pre>
+    </div>
+
+    <h3>fetch()</h3>
+    <p>The <code class="regex">fetch()</code> method fetches the result of a prepared statement.</p>
+    <div class="example">
+        <h3>Example of Fetching Results</h3>
+        <pre class="example-code"><code>$stmt->fetch();</code></pre>
+    </div>
+
+   <h3>close()</h3>
+    <p>The <code class="regex">close()</code> method closes a prepared statement.</p>
+    <div class="example">
+        <h3>Example of Closing a Prepared Statement</h3>
+        <pre class="example-code"><code>$stmt->close();</code></pre>
+    </div>
+
+    <h2>Procedural Style Functions</h2>
+    <p>PHP also allows you to work with MySQL using a procedural approach, which is a bit different from the object-oriented style.</p>
+
+    <h3>mysqli_connect($host, $username, $password, $database)</h3>
+    <p>The <code class="regex">mysqli_connect($host, $username, $password, $database)</code> function opens a new connection to the MySQL server.</p>
+    <div class="example">
+        <h3>Example of Connecting to a Database</h3>
+        <pre class="example-code"><code>$con = mysqli_connect("localhost", "username", "password", "database");</code></pre>
+    </div>
+
+    <h3>mysqli_query($con, $query)</h3>
+    <p>The <code class="regex">mysqli_query($con, $query)</code> function executes a query on the database.</p>
+    <div class="example">
+        <h3>Example of Running a Query</h3>
+        <pre class="example-code"><code>$result = mysqli_query($con, "SELECT * FROM users");</code></pre>
+    </div>
+
+    <h3>mysqli_fetch_assoc($result)</h3>
+    <p>The <code class="regex">mysqli_fetch_assoc($result)</code> function fetches a result row as an associative array.</p>
+    <div class="example">
+        <h3>Example of Fetching a Row</h3>
+        <pre class="example-code"><code>$row = mysqli_fetch_assoc($result);</code></pre>
+    </div>
+
+    <h3>mysqli_fetch_array($result)</h3>
+    <p>The <code class="regex">mysqli_fetch_array($result)</code> function fetches a result row as an array (numeric, associative, or both).</p>
+    <div class="example">
+        <h3>Example of Fetching a Row</h3>
+        <pre class="example-code"><code>$row = mysqli_fetch_array($result);</code></pre>
+    </div>
+
+    <h3>mysqli_fetch_row($result)</h3>
+    <p>The <code class="regex">mysqli_fetch_row($result)</code> function fetches a result row as a numeric array.</p>
+    <div class="example">
+        <h3>Example of Fetching a Row</h3>
+        <pre class="example-code"><code>$row = mysqli_fetch_row($result);</code></pre>
+    </div>
+
+    <h3>mysqli_num_rows($result)</h3>
+    <p>The <code class="regex">mysqli_num_rows($result)</code> function returns the number of rows in the result set.</p>
+    <div class="example">
+        <h3>Example of Counting Rows</h3>
+        <pre class="example-code"><code>$num_rows = mysqli_num_rows($result);</code></pre>
+    </div>
+
+    <h3>mysqli_real_escape_string($con, $string)</h3>
+    <p>The <code class="regex">mysqli_real_escape_string($con, $string)</code> function escapes special characters in a string.</p>
+    <div class="example">
+        <h3>Example of Escaping a String</h3>
+        <pre class="example-code"><code>$safe_string = mysqli_real_escape_string($con, $unsafe_string);</code></pre>
+    </div>
+
+    <h3>mysqli_close($con)</h3>
+    <p>The <code class="regex">mysqli_close($con)</code> function closes the connection to the database.</p>
+    <div class="example">
+        <h3>Example of Closing a Connection</h3>
+        <pre class="example-code"><code>mysqli_close($con);</code></pre>
+    </div>
+
+</body>
+</html>
