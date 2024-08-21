@@ -51,9 +51,17 @@
             width: 100%;
             overflow: scroll;
         }
+        
         code {
           padding: 0;
           margin: 0;
+        }
+
+        .result {
+            background-color: #fff9c4;
+            padding: 10px;
+            border-left: 5px solid #fbc02d;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -121,26 +129,7 @@
         <br><span class="regex">\.</span> matches a literal dot, not any character.
         <br><span class="regex">\d</span> matches any digit (0-9).
         <br><span class="regex">\w</span> matches any word character (letters, digits, and underscores).
-        <br><span class="regex">\s</span> matches any whitespace (spaces, tabs, etc.).
-    </p>
-
-    <h2>Quick Reference Summary</h2>
-    <p>
-        <strong>Regex Symbols and Uses:</strong>
-        <br><span class="regex">.</span>: Any single character except a newline.
-        <br><span class="regex">*</span>: 0 or more of the preceding element.
-        <br><span class="regex">+</span>: 1 or more of the preceding element.
-        <br><span class="regex">?</span>: 0 or 1 of the preceding element (optional).
-        <br><span class="regex">[abc]</span>: Any one of the characters <em>a</em>, <em>b</em>, or <em>c</em>.
-        <br><span class="regex">[0-9]</span>: Any digit from 0 to 9.
-        <br><span class="regex">^</span>: Start of a string.
-        <br><span class="regex">$</span>: End of a string.
-        <br><span class="regex">(abc)</span>: Grouping; matches the exact sequence "abc".
-        <br><span class="regex">a|b</span>: Matches "a" or "b".
-        <br><span class="regex">{2,4}</span>: Matches between 2 and 4 of the preceding element.
-        <br><span class="regex">\d</span>: Matches any digit.
-        <br><span class="regex">\w</span>: Matches any word character.
-        <br><span class="regex">\s</span>: Matches any whitespace character.
+  <br><span class="regex">\s</span>: Matches any whitespace character.
     </p>
 
     <h2>Simple Use Case Example</h2>
@@ -158,8 +147,37 @@
         <li><span class="regex">-</span>: Matches the literal dash.</li>
         <li><span class="regex">\d{4}</span>: Matches four digits.</li>
     </ul>
-    <p>This matches the pattern "123-456-7890" exactly.</p>
+    <p class="result"><strong>Result:</strong> The output of the code is an array containing the matched phone number: <code>["123-456-7890"]</code>.</p>
 
- <script src='https://azeembakhsh04.github.io/public/js/dialog.js'></script>
+    <h2>Regex Special Sequences</h2>
+    <p><strong>Special Sequences:</strong> Regex also includes special sequences that are not necessarily characters or symbols but serve specific functions.</p>
+    <ul>
+        <li><span class="regex">\d</span>: Matches any digit (0-9).</li>
+        <li><span class="regex">\D</span>: Matches any non-digit character.</li>
+        <li><span class="regex">\w</span>: Matches any word character (letters, digits, and underscores).</li>
+        <li><span class="regex">\W</span>: Matches any non-word character.</li>
+        <li><span class="regex">\s</span>: Matches any whitespace character (spaces, tabs, etc.).</li>
+        <li><span class="regex">\S</span>: Matches any non-whitespace character.</li>
+        <li><span class="regex">\b</span>: Matches a word boundary.</li>
+        <li><span class="regex">\B</span>: Matches a non-word boundary.</li>
+    </ul>
+
+    <h2>Example with Special Sequences</h2>
+    <p>Example: To find a sequence of digits followed by a non-digit character, use the following pattern:</p>
+    <pre class="example-code">
+        <code>
+            let text = "The code is 1234, and it is valid.";
+            let regex = /\d+\D/;
+            console.log(text.match(regex));  // Output: ["1234,"]
+        </code>
+    </pre>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><span class="regex">\d+</span>: Matches one or more digits.</li>
+        <li><span class="regex">\D</span>: Matches a non-digit character (in this case, the comma).</li>
+    </ul>
+    <p class="result"><strong>Result:</strong> The output of the code is an array containing the matched sequence: <code>["1234,"]</code>.</p>
+
+    <script src='https://azeembakhsh04.github.io/public/js/dialog.js'></script>
 </body>
 </html>
