@@ -3,7 +3,7 @@
      "msgSubtitle": "Hi im azeem",
      "btnTxt": "Visit",
      "btnType": "url",
-     "btnURL": "https://google.com"
+     "btnURL": "https://google.com",
      "cancelable": true,
      "status": true
 }
