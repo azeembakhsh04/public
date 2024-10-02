@@ -4,6 +4,7 @@
      "btnTxt": "Visit",
      "btnType": "URL",
      "btnURL": "https://google.com",
+     "cancelBtn": true,
      "cancelable": false,
      "status": true
 }
