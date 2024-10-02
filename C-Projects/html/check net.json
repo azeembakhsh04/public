@@ -1,0 +1,11 @@
+ {
+  "developerMsg": {
+     "msgTitle": "Alert",
+     "msgSubtitle": "Hi im azeem",
+     "positiveBtn: "Visit",
+     "positiveBtnURL": "https://google.com"
+     "cancelable": true,
+     "status": true
+   }
+
+}
