@@ -2,7 +2,7 @@
      "msgTitle": "Alert",
      "msgSubtitle": "Hi im azeem",
      "btnTxt": "Visit",
-     "btnType": "URL",
+     "btnType": "EXIT",
      "btnURL": "https://google.com",
      "cancelBtn": true,
      "cancelable": false,
